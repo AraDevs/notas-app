@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GradeCheck</string>
+    <string name="error_network_timeout">Al parecer, el servidor no contestó</string>
+    <string name="error_auth_fail">No se pudo conectar al servidor</string>
+    <string name="error_server">Error de Servidor</string>
+    <string name="error_network">Verifique su conexión a internet</string>
+    <string name="error_no_id">Se obtuvo el error:</string>
+</resources>
