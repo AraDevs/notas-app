@@ -19,50 +19,55 @@ import static com.android.volley.VolleyLog.TAG;
 public class ParseJson {
 
     public ArrayList<Courses> parseJson(JSONObject jsonObject) {
-        // Variables locales
+        //declaring useful variables
         ArrayList<Courses> courses = new ArrayList<>();
-        JSONArray jsonArray;
+        JSONArray registeredArray;
 
         try {
-            // Obtener el array del objeto
-            jsonArray = jsonObject.getJSONArray("registeredCourse");
+            // retrieving registered courses
+            registeredArray = jsonObject.getJSONArray("registeredCourse");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
+            //navigating through courses
+            for (int i = 0; i < registeredArray.length(); i++) {
                 try {
+                    //useful local variables
+                    ArrayList<String> tempEval = new ArrayList<>();
+                    ArrayList<String> tempPercentages = new ArrayList<>();
 
-                    ArrayList<String> tempEvals = new ArrayList<>();
-                    ArrayList<String> tempPercentajes = new ArrayList<>();
-
-                    JSONObject registeredCourse = jsonArray.getJSONObject(i);
-                    JSONObject teacher = registeredCourse.getJSONObject("courseTeacher");
-                    JSONObject course = teacher.getJSONObject("course");
+                    //fragmenting JSON in sections
+                    JSONObject registeredCourse = registeredArray.getJSONObject(i);
+                    JSONObject teacherObj = registeredCourse.getJSONObject("courseTeacher");
+                    JSONObject courseObj = teacherObj.getJSONObject("course");
                     JSONArray evaArray = registeredCourse.getJSONArray("gradeList");
 
                     for (int j = 0; j < evaArray.length(); j++) {
-
+                        //obtaining current evaluations
                         JSONObject evaObject = evaArray.getJSONObject(j);
                         JSONObject currentEva = evaObject.getJSONObject("evaluation");
 
-                        tempEvals.add(evaObject.getString("grade"));
-                        tempPercentajes.add(currentEva.getString("percentage"));
-
+                        //adding data to array list
+                        tempEval.add(evaObject.getString("grade"));
+                        tempPercentages.add(currentEva.getString("percentage"));
                     }
 
+                    //filling evaluations model
                     Evaluations e = new Evaluations(
                             "1",
-                            tempEvals,
-                            tempPercentajes
+                            tempEval,
+                            tempPercentages
                     );
 
+                    //filling courses model
                     Courses c = new Courses(
-                            course.getString("id"),
-                            course.getString("name"),
+                            courseObj.getString("id"),
+                            courseObj.getString("name"),
                             e);
 
+                    //filling courses array list
                     courses.add(c);
 
                 } catch (JSONException e) {
-                    Log.e(TAG, "Error de parsing json: " + e.getMessage());
+                    Log.e(TAG, "Json parsing Error: " + e.getMessage());
                 }
             }
 

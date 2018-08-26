@@ -1,5 +1,6 @@
 package aradevs.com.gradecheck;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +14,10 @@ import br.liveo.navigationliveo.NavigationLiveo;
 
 public class HomeActivity extends NavigationLiveo implements OnItemClickListener {
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onInt(Bundle savedInstanceState) {
-// User Information
+        // User Information
         this.userName.setText("Ar4 Mendez");
         this.userEmail.setText("ooskarargueta08@gmail.com");
         this.userPhoto.setImageResource(R.drawable.g);
@@ -25,8 +27,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         HelpLiveo mHelpLiveo = new HelpLiveo();
         mHelpLiveo.add("Notas", R.mipmap.ic_grade);
 
-        //with(this, Navigation.THEME_DARK). add theme dark
-        //with(this, Navigation.THEME_LIGHT). add theme light
 
         with(this) // default theme is dark
                 .startingPosition(0) //Starting position in the list
@@ -36,15 +36,13 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 .setOnPrepareOptionsMenu(onPrepare)
                 .setOnClickFooter(onClickFooter)
                 .build();
-
-
-
     }
 
     @Override
     public void onItemClick(int position) {
         FragmentTransaction trans = HomeActivity.this.getFragmentManager().beginTransaction();
 
+        //declaring position listeners for fragments
         switch (position){
             case 0:
                 GradesFragment inicio = new GradesFragment();
@@ -52,6 +50,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 break;
         }
 
+        //switching fragment
         trans.commit();
     }
     private OnPrepareOptionsMenuLiveo onPrepare = new OnPrepareOptionsMenuLiveo() {
@@ -68,6 +67,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private View.OnClickListener onClickFooter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //login out and returning to LoginLayout
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
         }

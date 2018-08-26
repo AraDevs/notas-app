@@ -17,8 +17,8 @@ import aradevs.com.gradecheck.models.Courses;
  */
 public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder> {
 
+    //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
-
     private ArrayList<Courses> items;
 
 
@@ -28,6 +28,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //declaring view holder
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_grades, parent, false);
         return new ViewHolder(v);
@@ -36,17 +37,22 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //declaring variables
         Courses c = items.get(position);
-        holder.name.setText(c.getName());
+        Double tot = 0.0;
         ArrayList<Double> grades = new ArrayList<>();
+
+        //retrieving evaluations info
         int p = c.getEva().getEvaluations().size() / 3;
         for (int i = 1; i <= p; i++) {
             grades.add(c.getEva().getProm(i));
         }
-        Double tot = 0.0;
         for (double item : grades) {
             tot += item;
         }
+
+        //setting values
+        holder.name.setText(c.getName());
         holder.grades.setText(String.format("%.2f",tot));
 
     }
@@ -57,12 +63,15 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        //declaring variables
         CardView ln;
         TextView name;
         TextView grades;
 
         ViewHolder(CardView itemView) {
             super(itemView);
+
+            //binding UI
             ln = itemView;
             name = itemView.findViewById(R.id.tvCourseName);
             grades = itemView.findViewById(R.id.tvGrade);

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class Evaluations {
     private String period;
     private ArrayList<String> evaluations;
-    private ArrayList<String> percentaje;
+    private ArrayList<String> percentage;
 
     public Evaluations() {}
 
-    public Evaluations(String period, ArrayList<String> evaluations, ArrayList<String> percentaje) {
+    public Evaluations(String period, ArrayList<String> evaluations, ArrayList<String> percentage) {
         this.period = period;
         this.evaluations = evaluations;
-        this.percentaje = percentaje;
+        this.percentage = percentage;
     }
 
     public String getPeriod() {
@@ -34,12 +34,12 @@ public class Evaluations {
         this.evaluations = evaluations;
     }
 
-    public ArrayList<String> getPercentaje() {
-        return percentaje;
+    public ArrayList<String> getPercentage() {
+        return percentage;
     }
 
-    public void setPercentaje(ArrayList<String> percentaje) {
-        this.percentaje = percentaje;
+    public void setPercentage(ArrayList<String> percentage) {
+        this.percentage = percentage;
     }
 
     public Double getProm(int position) {
@@ -50,7 +50,7 @@ public class Evaluations {
         if (getEvaluations().size() >= 3) {
             for (int i = (3 * position) - 3; i < (3 * position); i++) {
                 Double eva1;
-                eva1 = Double.parseDouble(getEvaluations().get(i)) * Double.parseDouble(getPercentaje().get(i)) / 100;
+                eva1 = Double.parseDouble(getEvaluations().get(i)) * Double.parseDouble(getPercentage().get(i)) / 100;
                 grades.add(eva1);
             }
             sum = grades.get(0) + grades.get(1) + grades.get(2);

@@ -28,6 +28,7 @@ public class LoginActivity extends Activity {
 
     @OnClick(R.id.btnLogin)
     public void onViewClicked() {
+        //go to Home activity
         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         finish();
     }
