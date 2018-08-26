@@ -1,5 +1,6 @@
 package aradevs.com.gradecheck;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -35,11 +36,23 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 .setOnPrepareOptionsMenu(onPrepare)
                 .setOnClickFooter(onClickFooter)
                 .build();
+
+
+
     }
 
     @Override
     public void onItemClick(int position) {
+        FragmentTransaction trans = HomeActivity.this.getFragmentManager().beginTransaction();
 
+        switch (position){
+            case 0:
+                Grades inicio = new Grades();
+                trans.replace(R.id.container, inicio, "Inicio");
+                break;
+        }
+
+        trans.commit();
     }
     private OnPrepareOptionsMenuLiveo onPrepare = new OnPrepareOptionsMenuLiveo() {
         @Override

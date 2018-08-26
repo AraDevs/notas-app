@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:layout_margin="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:backgroundTint="@color/colorAccent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textIcons"
+            android:text="Matematica II"
+            android:layout_weight="4"
+            android:textSize="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/tvCourseName"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textIcons"
+            android:text="9.8"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/tvGrade"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
