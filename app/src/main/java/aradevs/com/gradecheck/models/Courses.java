@@ -1,15 +1,16 @@
 package aradevs.com.gradecheck.models;
 
-import java.util.ArrayList;
-
+/**
+ * Created by Ar4 on 25/08/2018.
+ */
 public class Courses {
     private String id;
     private String name;
-    private ArrayList<Evaluations> eva;
+    private Evaluations eva;
 
     public Courses() {}
 
-    public Courses(String id, String name, ArrayList<Evaluations> eva) {
+    public Courses(String id, String name, Evaluations eva) {
         this.id = id;
         this.name = name;
         this.eva = eva;
@@ -31,11 +32,11 @@ public class Courses {
         this.name = name;
     }
 
-    public ArrayList<Evaluations> getEva() {
+    public Evaluations getEva() {
         return eva;
     }
 
-    public void setEva(ArrayList<Evaluations> eva) {
+    public void setEva(Evaluations eva) {
         this.eva = eva;
     }
 }

@@ -1,5 +1,8 @@
 package aradevs.com.gradecheck.models;
 
+/**
+ * Created by Ar4 on 25/08/2018.
+ */
 public class Users {
     private String id;
     private String name;

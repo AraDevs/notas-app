@@ -1,18 +1,21 @@
 package aradevs.com.gradecheck.models;
 
+import java.util.ArrayList;
+
+/**
+ * Created by Ar4 on 25/08/2018.
+ */
 public class Evaluations {
     private String period;
-    private String eva1;
-    private String eva2;
-    private String eva3;
+    private ArrayList<String> evaluations;
+    private ArrayList<String> percentaje;
 
     public Evaluations() {}
 
-    public Evaluations(String period, String eva1, String eva2, String eva3) {
+    public Evaluations(String period, ArrayList<String> evaluations, ArrayList<String> percentaje) {
         this.period = period;
-        this.eva1 = eva1;
-        this.eva2 = eva2;
-        this.eva3 = eva3;
+        this.evaluations = evaluations;
+        this.percentaje = percentaje;
     }
 
     public String getPeriod() {
@@ -23,27 +26,46 @@ public class Evaluations {
         this.period = period;
     }
 
-    public String getEva1() {
-        return eva1;
+    public ArrayList<String> getEvaluations() {
+        return evaluations;
     }
 
-    public void setEva1(String eva1) {
-        this.eva1 = eva1;
+    public void setEvaluations(ArrayList<String> evaluations) {
+        this.evaluations = evaluations;
     }
 
-    public String getEva2() {
-        return eva2;
+    public ArrayList<String> getPercentaje() {
+        return percentaje;
     }
 
-    public void setEva2(String eva2) {
-        this.eva2 = eva2;
+    public void setPercentaje(ArrayList<String> percentaje) {
+        this.percentaje = percentaje;
     }
 
-    public String getEva3() {
-        return eva3;
-    }
+    public Double getProm(int position) {
+        Double total = 0.0;
+        Double sum;
+        ArrayList<Double> grades = new ArrayList<>();
 
-    public void setEva3(String eva3) {
-        this.eva3 = eva3;
+        if (getEvaluations().size() >= 3) {
+            for (int i = (3 * position) - 3; i < (3 * position); i++) {
+                Double eva1;
+                eva1 = Double.parseDouble(getEvaluations().get(i)) * Double.parseDouble(getPercentaje().get(i)) / 100;
+                grades.add(eva1);
+            }
+            sum = grades.get(0) + grades.get(1) + grades.get(2);
+            switch (position) {
+                case 1:
+                    total = sum * 0.30;
+                    break;
+                case 2:
+                    total = sum * 0.35;
+                    break;
+                case 3:
+                    total = sum * 0.35;
+            }
+        }
+
+        return total;
     }
 }

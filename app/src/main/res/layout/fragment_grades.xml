@@ -3,11 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Grades">
+    tools:context=".GradesFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/pbGrades"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorAccent" />
         <TextView
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
