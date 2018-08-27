@@ -10,15 +10,16 @@ import java.util.ArrayList;
 
 import aradevs.com.gradecheck.models.Courses;
 import aradevs.com.gradecheck.models.Evaluations;
+import aradevs.com.gradecheck.models.Users;
 
 import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by Ar4 on 26/08/2018.
  */
-public class ParseJson {
+public class ParseJsonHelper {
 
-    public ArrayList<Courses> parseJson(JSONObject jsonObject) {
+    public ArrayList<Courses> parseJsonCourses(JSONObject jsonObject) {
         //declaring useful variables
         ArrayList<Courses> courses = new ArrayList<>();
         JSONArray registeredArray;
@@ -75,6 +76,24 @@ public class ParseJson {
             e.printStackTrace();
         }
         return courses;
+    }
+
+    public Users parseJsonUsers(JSONObject jsonObject) {
+        //declaring useful variables
+        Users users = new Users();
+
+        try {
+            JSONObject userJson = jsonObject.getJSONObject("user");
+            users.setId(jsonObject.getString("id"));
+            users.setEmail(userJson.getString("email"));
+            users.setName(userJson.getString("name"));
+            users.setPhone(userJson.getString("phone"));
+            users.setSurname(userJson.getString("surname"));
+            users.setUsername(userJson.getString("username"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }
 

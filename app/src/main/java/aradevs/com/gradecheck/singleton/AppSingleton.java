@@ -14,21 +14,19 @@ import com.android.volley.toolbox.Volley;
  */
 
 public class AppSingleton {
-    public static int promocont;
-    private static AppSingleton singleton;
-    private static Context context;
-    // Atributos
+
+
+    // declaring useful variables
     private ImageLoader imageLoader;
     private RequestQueue requestQueue;
-
+    private static AppSingleton singleton;
     private AppSingleton(Context context) {
-        AppSingleton.context = context;
-        requestQueue = getRequestQueue();
+        requestQueue = getRequestQueue(context);
 
         imageLoader = new ImageLoader(requestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
+                            cache = new LruCache<>(20);
 
                     @Override
                     public Bitmap getBitmap(String url) {
@@ -50,15 +48,15 @@ public class AppSingleton {
         return singleton;
     }
 
-    public RequestQueue getRequestQueue() {
+    private RequestQueue getRequestQueue(Context context) {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
         return requestQueue;
     }
 
-    public void addToRequestQueue(Request req) {
-        getRequestQueue().add(req);
+    public void addToRequestQueue(Request req, Context context) {
+        getRequestQueue(context).add(req);
     }
 
     public ImageLoader getImageLoader() {

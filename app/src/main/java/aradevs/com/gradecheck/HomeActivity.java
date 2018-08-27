@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
+import aradevs.com.gradecheck.helpers.SharedHelper;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
 import br.liveo.model.HelpLiveo;
@@ -14,12 +15,17 @@ import br.liveo.navigationliveo.NavigationLiveo;
 
 public class HomeActivity extends NavigationLiveo implements OnItemClickListener {
 
+    //Shared preferences helper
+    SharedHelper sh;
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onInt(Bundle savedInstanceState) {
+        sh = new SharedHelper(HomeActivity.this);
+
         // User Information
-        this.userName.setText("Ar4 Mendez");
-        this.userEmail.setText("ooskarargueta08@gmail.com");
+        this.userName.setText(sh.getUser().getName());
+        this.userEmail.setText(sh.getUser().getEmail());
         this.userPhoto.setImageResource(R.drawable.g);
         this.userBackground.setImageResource(R.drawable.background);
 
@@ -67,7 +73,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private View.OnClickListener onClickFooter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //login out and returning to LoginLayout
+            //clearing shared preferences
+            sh.clear();
+            //redirect to login
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
         }

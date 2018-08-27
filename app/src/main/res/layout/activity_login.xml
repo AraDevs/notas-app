@@ -7,7 +7,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -47,13 +47,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Usuario:"
+                android:text="@string/user"
                 android:textColor="@color/textPrimary"/>
             <EditText
                 android:id="@+id/etLoginUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Usuario"
+                android:hint="@string/user"
+                android:inputType="text"
                 android:backgroundTint="@color/colorPrimary"/>
         </LinearLayout>
         <LinearLayout
@@ -64,13 +65,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contraseña:"
+                android:text="@string/password"
                 android:textColor="@color/textPrimary"/>
             <EditText
                 android:id="@+id/etLoginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Contraseña"
+                android:hint="@string/password"
+                android:inputType="textPassword"
                 android:backgroundTint="@color/colorPrimary"/>
         </LinearLayout>
         <LinearLayout
@@ -82,7 +84,7 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Inicar sesion"
+                android:text="@string/login"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/textIcons"
                 android:layout_gravity="center"
@@ -92,7 +94,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Olvide mi contraseña"
+                android:text="@string/forgetPassword"
                 android:gravity="center"
                 android:textColor="@color/colorAccent"/>
         </LinearLayout>
