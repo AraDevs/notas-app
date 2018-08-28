@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import aradevs.com.gradecheck.helpers.ErrorHelper;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.SharedHelper;
@@ -63,15 +65,15 @@ public class LoginActivity extends Activity {
                             finish();
 
                         } catch (JSONException e) {
+
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.networkResponse.statusCode == 401) {
-                    Toast.makeText(getApplicationContext(), "Usuario o clave incorrecto", Toast.LENGTH_LONG).show();
-                }
+                Log.e("Error login", new String(error.networkResponse.data));
+                Toast.makeText(getApplicationContext(), ErrorHelper.getError(new String(error.networkResponse.data)), Toast.LENGTH_LONG).show();
                 VolleyLog.d("volley", "Error: " + error.getMessage());
                 error.printStackTrace();
             }
@@ -112,6 +114,13 @@ public class LoginActivity extends Activity {
         /*
         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         finish();*/
-        requestData(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
+        String username = etLoginUsername.getText().toString().trim();
+        String pass = etLoginPassword.getText().toString().trim();
+        if (!username.isEmpty() && !pass.isEmpty()) {
+            requestData(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
+        } else {
+            Toast.makeText(getApplicationContext(), "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

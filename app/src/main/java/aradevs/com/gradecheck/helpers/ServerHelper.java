@@ -5,7 +5,7 @@ package aradevs.com.gradecheck.helpers;
  */
 public class ServerHelper {
     //Declaring server endpoints
-    public static final String URL = "http://192.168.1.4:8080/POOSistema_NotasAPI/";
+    public static final String URL = "http://142.93.207.172:8080/POOSistema_NotasAPI-1.0-SNAPSHOT/";
     public static final String COURSES = "RegisteredCourses/read/";
     public static final String USER = "Students/login";
 }
