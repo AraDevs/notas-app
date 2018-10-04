@@ -63,10 +63,16 @@ public class GradesFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //execute an async task to serialize JSON
-                        JsonAsync ja = new JsonAsync(response, view);
-                        ja.execute();
                         swiperefresh.setRefreshing(false);
+                        ProgressBar pb = view.findViewById(R.id.pbGrades);
+                        pb.setVisibility(View.GONE);
+                        RecyclerView mRecyclerView = view.findViewById(R.id.gradeRecyclerView);
+                        assert mRecyclerView != null;
+                        mRecyclerView.setHasFixedSize(true);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        RecyclerView.Adapter mAdapter = new AdapterGrades(response);
+                        mRecyclerView.setAdapter(mAdapter);
                     }
                 },
                 new Response.ErrorListener() {
@@ -129,38 +135,4 @@ public class GradesFragment extends Fragment {
         unbinder.unbind();
     }
 
-}
-
-//async task to serialize json
-class JsonAsync extends AsyncTask<Void, Void, ArrayList<Courses>> {
-    @SuppressLint("StaticFieldLeak")
-    private View view;
-    private JSONObject json;
-
-    JsonAsync(JSONObject j, View view) {
-        this.view = view;
-        this.json = j;
-    }
-
-    @Override
-    protected ArrayList<Courses> doInBackground(Void... pParams) {
-        ParseJsonHelper pj = new ParseJsonHelper();
-        return pj.parseJsonCourses(json);
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<Courses> courses) {
-        super.onPostExecute(courses);
-        ProgressBar pb = view.findViewById(R.id.pbGrades);
-        pb.setVisibility(View.GONE);
-        RecyclerView mRecyclerView = view.findViewById(R.id.gradeRecyclerView);
-        assert mRecyclerView != null;
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter mAdapter = new AdapterGrades(courses);
-        mRecyclerView.setAdapter(mAdapter);
-
-        Log.e("Available", String.valueOf(Runtime.getRuntime().freeMemory()));
-    }
 }

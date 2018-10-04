@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import aradevs.com.gradecheck.R;
+import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Courses;
 
 /**
@@ -22,8 +25,9 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
     private ArrayList<Courses> items;
 
 
-    public AdapterGrades(ArrayList<Courses> objects) {
-        items = objects;
+    public AdapterGrades(JSONObject objects) {
+        ParseJsonHelper pj = new ParseJsonHelper();
+        items = pj.parseJsonCourses(objects);
     }
 
     @Override
