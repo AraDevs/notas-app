@@ -32,6 +32,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         // Creating items navigation
         HelpLiveo mHelpLiveo = new HelpLiveo();
         mHelpLiveo.add("Notas", R.mipmap.ic_grade);
+        mHelpLiveo.add("Materias Inscritas", R.mipmap.ic_subjects);
+        mHelpLiveo.add("Docentes", R.mipmap.ic_teachers);
+        mHelpLiveo.add("Apelacion de notas", R.mipmap.ic_mistake);
+        mHelpLiveo.add("Ultima actividad", R.mipmap.ic_recent);
 
 
         with(this) // default theme is dark
@@ -53,6 +57,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             case 0:
                 GradesFragment inicio = new GradesFragment();
                 trans.replace(R.id.container, inicio, "Inicio");
+                break;
+            case 1:
+                GradeDetailFragment detailFragment = new GradeDetailFragment();
+                trans.replace(R.id.container, detailFragment, "Detalle");
                 break;
         }
 

@@ -60,6 +60,7 @@ public class LoginActivity extends Activity {
                             Users tempU = p.parseJsonUsers(obj);
                             sh.saveUser(tempU);
 
+
                             //go to next activity
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();

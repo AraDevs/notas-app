@@ -34,12 +34,13 @@ public class ParseJsonHelper {
                     //useful local variables
                     ArrayList<String> tempEval = new ArrayList<>();
                     ArrayList<String> tempPercentages = new ArrayList<>();
+                    ArrayList<String> tempPeriod = new ArrayList<>();
 
                     //fragmenting JSON in sections
                     JSONObject registeredCourse = registeredArray.getJSONObject(i);
                     JSONObject teacherObj = registeredCourse.getJSONObject("courseTeacher");
                     JSONObject courseObj = teacherObj.getJSONObject("course");
-                    JSONArray evaArray = registeredCourse.getJSONArray("gradeList");
+                    JSONArray evaArray = registeredCourse.getJSONArray("grades");
 
                     for (int j = 0; j < evaArray.length(); j++) {
                         //obtaining current evaluations
@@ -49,11 +50,12 @@ public class ParseJsonHelper {
                         //adding data to array list
                         tempEval.add(evaObject.getString("grade"));
                         tempPercentages.add(currentEva.getString("percentage"));
+                        tempPeriod.add(currentEva.getString("period"));
                     }
 
                     //filling evaluations model
                     Evaluations e = new Evaluations(
-                            "1",
+                            tempPeriod,
                             tempEval,
                             tempPercentages
                     );
@@ -85,10 +87,10 @@ public class ParseJsonHelper {
         try {
             JSONObject userJson = jsonObject.getJSONObject("user");
             users.setId(jsonObject.getString("id"));
-            users.setEmail(userJson.getString("email"));
-            users.setName(userJson.getString("name"));
-            users.setPhone(userJson.getString("phone"));
-            users.setSurname(userJson.getString("surname"));
+            users.setEmail(userJson.getJSONObject("person").getString("email"));
+            users.setName(userJson.getJSONObject("person").getString("name"));
+            users.setPhone(userJson.getJSONObject("person").getString("phone"));
+            users.setSurname(userJson.getJSONObject("person").getString("surname"));
             users.setUsername(userJson.getString("username"));
         } catch (JSONException e) {
             e.printStackTrace();
