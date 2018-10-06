@@ -46,6 +46,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         Double tot = 0.0;
         ArrayList<Double> grades = new ArrayList<>();
 
+        /*DEPRECATED
         //retrieving evaluations info
         int p = c.getEva().getEvaluations().size() / 3;
         for (int i = 1; i <= p; i++) {
@@ -53,7 +54,10 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         }
         for (double item : grades) {
             tot += item;
-        }
+        }*/
+
+
+        tot = c.getEva().getProm();
 
         //setting values
         holder.name.setText(c.getName());

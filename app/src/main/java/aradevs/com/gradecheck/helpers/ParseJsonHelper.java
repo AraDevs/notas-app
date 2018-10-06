@@ -34,6 +34,7 @@ public class ParseJsonHelper {
                     //useful local variables
                     ArrayList<String> tempEval = new ArrayList<>();
                     ArrayList<String> tempPercentages = new ArrayList<>();
+                    ArrayList<String> tempPeriod = new ArrayList<>();
 
                     //fragmenting JSON in sections
                     JSONObject registeredCourse = registeredArray.getJSONObject(i);
@@ -49,11 +50,12 @@ public class ParseJsonHelper {
                         //adding data to array list
                         tempEval.add(evaObject.getString("grade"));
                         tempPercentages.add(currentEva.getString("percentage"));
+                        tempPeriod.add(currentEva.getString("period"));
                     }
 
                     //filling evaluations model
                     Evaluations e = new Evaluations(
-                            "1",
+                            tempPeriod,
                             tempEval,
                             tempPercentages
                     );

@@ -1,10 +1,8 @@
 package aradevs.com.gradecheck;
 
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,13 +21,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import aradevs.com.gradecheck.adapters.AdapterGrades;
-import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.SharedHelper;
-import aradevs.com.gradecheck.models.Courses;
 import aradevs.com.gradecheck.models.Users;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 import butterknife.BindView;
