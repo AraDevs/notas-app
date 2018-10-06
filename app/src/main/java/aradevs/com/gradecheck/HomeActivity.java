@@ -58,6 +58,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 GradesFragment inicio = new GradesFragment();
                 trans.replace(R.id.container, inicio, "Inicio");
                 break;
+            case 1:
+                GradeDetailFragment detailFragment = new GradeDetailFragment();
+                trans.replace(R.id.container, detailFragment, "Detalle");
+                break;
         }
 
         //switching fragment

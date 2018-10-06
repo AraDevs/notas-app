@@ -1,72 +1,61 @@
 package aradevs.com.gradecheck.adapters;
 
-import android.annotation.SuppressLint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import aradevs.com.gradecheck.R;
-import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Courses;
 
 /**
- * Created by Ar4 on 25/08/2018.
+ * Created by Ar4 on 6/10/2018.
  */
-public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder> {
+public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.ViewHolder> {
 
     //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
     private ArrayList<Courses> items;
 
+    public AdapterGradeDetail() {
 
-    public AdapterGrades(JSONObject objects) {
-        ParseJsonHelper pj = new ParseJsonHelper();
-        items = pj.parseJsonCourses(objects);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterGradeDetail.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //declaring view holder
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_grades, parent, false);
+                .inflate(R.layout.item_gradedetail, parent, false);
         return new ViewHolder(v);
     }
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //declaring variables
-        Courses c = items.get(position);
-        Double tot = 0.0;
-        ArrayList<Double> grades = new ArrayList<>();
 
-        /*DEPRECATED
-        //retrieving evaluations info
-        int p = c.getEva().getEvaluations().size() / 3;
-        for (int i = 1; i <= p; i++) {
-            grades.add(c.getEva().getProm(i));
-        }
-        for (double item : grades) {
-            tot += item;
-        }*/
-
-
-        tot = c.getEva().getProm();
-
-        //setting values
-        holder.name.setText(c.getName());
-        holder.grades.setText(String.format("%.2f",tot));
+        //setting on click listener to the cardview
+        holder.ln.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout expandableLayout = v.findViewById(R.id.expandableLayout);
+                int isExpanded = expandableLayout.getVisibility();
+                if (isExpanded == View.GONE) {
+                    expandableLayout.setVisibility(View.VISIBLE);
+                } else {
+                    expandableLayout.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        // return items.size();
+        return 3;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,8 +71,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
             ln = itemView;
             name = itemView.findViewById(R.id.tvCourseName);
             grades = itemView.findViewById(R.id.tvGrade);
+
         }
     }
-
-
 }
