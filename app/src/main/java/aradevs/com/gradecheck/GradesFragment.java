@@ -52,7 +52,7 @@ public class GradesFragment extends Fragment {
     //request grades data method
     private void requestData(final View view, String id) {
         JsonObjectRequest request = new JsonObjectRequest(
-                ServerHelper.URL + ServerHelper.COURSES + id,
+                ServerHelper.URL + ServerHelper.COURSES + id + "/full",
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -72,7 +72,7 @@ public class GradesFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Error Response: ", error.getMessage());
+                        error.printStackTrace();
                         Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
                         swiperefresh.setRefreshing(false);
                         pbGrades.setVisibility(View.GONE);
