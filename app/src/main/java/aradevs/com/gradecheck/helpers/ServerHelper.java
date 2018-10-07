@@ -11,5 +11,7 @@ public class ServerHelper {
     public static final String USER = "students/login";
     public static final String TEACHERS = "employees/byStudent/";
 
+    public static final String CURRENT_GRADES = "/full/active";
+    public static final String CURRENT_COURSES = "/courses/active";
     public static final String CURRENT_TEACHERS = "/users/people";
 }

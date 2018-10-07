@@ -52,7 +52,7 @@ public class SubjectsFragment extends Fragment {
     //request grades data method
     private void requestData(final View view, String id) {
         JsonObjectRequest request = new JsonObjectRequest(
-                ServerHelper.URL + ServerHelper.COURSES + id + "/courses",
+                ServerHelper.URL + ServerHelper.COURSES + id + ServerHelper.CURRENT_COURSES,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
