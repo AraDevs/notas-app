@@ -2,6 +2,7 @@ package aradevs.com.gradecheck.adapters;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        Teachers t = items.get(position);
+        final Teachers t = items.get(position);
         //setting on click listener to the cardview
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
         holder.name.setText(fullName);
@@ -57,6 +58,9 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 TeacherDetailFragment teacherDetailFragment = new TeacherDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("teacher", t);
+                teacherDetailFragment.setArguments(bundle);
                 trans.replace(R.id.container, teacherDetailFragment, "Inicio");
                 trans.addToBackStack(null);
                 trans.commit();

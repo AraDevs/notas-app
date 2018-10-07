@@ -182,5 +182,68 @@ public class ParseJsonHelper {
 
         return teachers;
     }
+
+    public ArrayList<Courses> parseJsonTeacherCourses(JSONObject jsonObject) {
+        //declaring useful variables
+        ArrayList<Courses> courses = new ArrayList<>();
+        JSONArray registeredArray;
+
+        //try {
+        // retrieving registered courses
+        Log.e("Tamano: ", String.valueOf(jsonObject.length()));
+        try {
+            registeredArray = jsonObject.getJSONArray("courseTeachers");
+            //navigating through courses
+            for (int i = 0; i < registeredArray.length(); i++) {
+                try {
+                    //fragmenting JSON in sections
+                    JSONObject registeredCourse = registeredArray.getJSONObject(i);
+                    JSONObject courseObj = registeredCourse.getJSONObject("course");
+
+                    //filling evaluations model
+                    Evaluations e = new Evaluations(
+                            null,
+                            null,
+                            null
+                    );
+
+                    //filling courses model
+                    Courses c = new Courses(
+                            courseObj.getString("id"),
+                            courseObj.getString("name"),
+                            e);
+
+                    //filling courses array list
+                    courses.add(c);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json parsing Error: " + e.getMessage());
+                }
+            }/*
+            }catch (Exception e){
+                JSONObject courseObj = jsonObject.getJSONObject("courseTeachers").getJSONObject("course");
+
+                //filling evaluations model
+                Evaluations evaluations = new Evaluations(
+                        null,
+                        null,
+                        null
+                );
+
+                //filling courses model
+                Courses c = new Courses(
+                        courseObj.getString("id"),
+                        courseObj.getString("name"),
+                        evaluations);
+
+                //filling courses array list
+                courses.add(c);
+            }*/
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
 }
 
