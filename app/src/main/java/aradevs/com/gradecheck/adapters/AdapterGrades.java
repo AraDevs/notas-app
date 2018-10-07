@@ -3,8 +3,10 @@ package aradevs.com.gradecheck.adapters;
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,21 +50,22 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //declaring variables
-        Courses c = items.get(position);
+        final Courses c = items.get(position);
         Double tot = 0.0;
+        ArrayList<Double> grades = new ArrayList<>();
 
-        /*DEPRECATED
         //retrieving evaluations info
         int p = c.getEva().getEvaluations().size() / 3;
         for (int i = 1; i <= p; i++) {
             grades.add(c.getEva().getProm(i));
         }
+        Log.e("items size", String.valueOf(c.getEva().getEvaluations().size()));
         for (double item : grades) {
             tot += item;
-        }*/
+        }
 
 
-        tot = c.getEva().getProm();
+        //tot = c.getEva().getProm();
 
         //setting values
         holder.name.setText(c.getName());
@@ -76,6 +79,10 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 GradeDetailFragment gradeDetailFragment = new GradeDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", c.getId());
+                bundle.putString("name", c.getName());
+                gradeDetailFragment.setArguments(bundle);
                 trans.replace(R.id.container, gradeDetailFragment, "Inicio");
                 trans.addToBackStack(null);
                 trans.commit();

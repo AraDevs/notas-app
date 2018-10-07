@@ -33,6 +33,7 @@ public class ParseJsonHelper {
             for (int i = 0; i < registeredArray.length(); i++) {
                 try {
                     //useful local variables
+                    ArrayList<String> tempDescription = new ArrayList<>();
                     ArrayList<String> tempEval = new ArrayList<>();
                     ArrayList<String> tempPercentages = new ArrayList<>();
                     ArrayList<String> tempPeriod = new ArrayList<>();
@@ -49,6 +50,7 @@ public class ParseJsonHelper {
                         JSONObject currentEva = evaObject.getJSONObject("evaluation");
 
                         //adding data to array list
+                        tempDescription.add(currentEva.getString("description"));
                         tempEval.add(evaObject.getString("grade"));
                         tempPercentages.add(currentEva.getString("percentage"));
                         tempPeriod.add(currentEva.getString("period"));
@@ -56,6 +58,7 @@ public class ParseJsonHelper {
 
                     //filling evaluations model
                     Evaluations e = new Evaluations(
+                            tempDescription,
                             tempPeriod,
                             tempEval,
                             tempPercentages
@@ -99,6 +102,7 @@ public class ParseJsonHelper {
 
                     //filling evaluations model
                     Evaluations e = new Evaluations(
+                            null,
                             null,
                             null,
                             null
@@ -204,6 +208,7 @@ public class ParseJsonHelper {
                     Evaluations e = new Evaluations(
                             null,
                             null,
+                            null,
                             null
                     );
 
@@ -244,6 +249,50 @@ public class ParseJsonHelper {
             e.printStackTrace();
         }
         return courses;
+    }
+
+    public Evaluations parseJsonCourseEvaluations(JSONObject jsonObject) {
+        //filling evaluations model
+        Evaluations evaluations = new Evaluations();
+        JSONArray registeredArray;
+        //useful local variables
+        ArrayList<String> tempDescription = new ArrayList<>();
+        ArrayList<String> tempEval = new ArrayList<>();
+        ArrayList<String> tempPercentages = new ArrayList<>();
+        ArrayList<String> tempPeriod = new ArrayList<>();
+        try {
+            // retrieving registered courses
+            registeredArray = jsonObject.getJSONArray("evaluation");
+
+            //navigating through courses
+            for (int i = 0; i < registeredArray.length(); i++) {
+                try {
+                    //obtaining current evaluations
+                    JSONObject evaObject = registeredArray.getJSONObject(i);
+                    JSONObject grade = evaObject.getJSONObject("grades");
+
+                    //adding data to array list
+                    tempDescription.add(evaObject.getString("description"));
+                    tempEval.add(grade.getString("grade"));
+                    tempPercentages.add(evaObject.getString("percentage"));
+                    tempPeriod.add(evaObject.getString("period"));
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json parsing Error: " + e.getMessage());
+                }
+            }
+            //filling evaluations model
+            evaluations = new Evaluations(
+                    tempDescription,
+                    tempPeriod,
+                    tempEval,
+                    tempPercentages
+            );
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return evaluations;
     }
 }
 

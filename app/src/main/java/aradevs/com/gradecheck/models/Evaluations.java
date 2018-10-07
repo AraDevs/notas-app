@@ -6,24 +6,26 @@ import java.util.ArrayList;
  * Created by Ar4 on 25/08/2018.
  */
 public class Evaluations {
-    private ArrayList<String> period;
+    private ArrayList<String> descriptions;
+    private ArrayList<String> periods;
     private ArrayList<String> evaluations;
     private ArrayList<String> percentage;
 
     public Evaluations() {}
 
-    public Evaluations(ArrayList<String> period, ArrayList<String> evaluations, ArrayList<String> percentage) {
-        this.period = period;
+    public Evaluations(ArrayList<String> descriptions, ArrayList<String> periods, ArrayList<String> evaluations, ArrayList<String> percentage) {
+        this.descriptions = descriptions;
+        this.periods = periods;
         this.evaluations = evaluations;
         this.percentage = percentage;
     }
 
-    public ArrayList<String> getPeriod() {
-        return period;
+    public ArrayList<String> getPeriods() {
+        return periods;
     }
 
-    public void setPeriod(ArrayList<String> period) {
-        this.period = period;
+    public void setPeriods(ArrayList<String> periods) {
+        this.periods = periods;
     }
 
     public ArrayList<String> getEvaluations() {
@@ -42,20 +44,30 @@ public class Evaluations {
         this.percentage = percentage;
     }
 
-    /* GET PROM BASED ON THE SELECTED PERIOD
-    public Double getProm(int period) {
+    public ArrayList<String> getDescriptions() {
+        return descriptions;
+    }
+
+    public void setDescriptions(ArrayList<String> descriptions) {
+        this.descriptions = descriptions;
+    }
+
+    // GET PROM BASED ON THE SELECTED PERIOD
+    public Double getProm(int periods) {
         Double total = 0.0;
         Double sum;
         ArrayList<Double> grades = new ArrayList<>();
 
         if (getEvaluations().size() >= 3) {
-            for (int i = (3 * period) - 3; i < (3 * period); i++) {
-                Double eva1;
-                eva1 = Double.parseDouble(getEvaluations().get(i)) * Double.parseDouble(getPercentage().get(i)) / 100;
+            for (int i = (3 * periods) - 3; i < (3 * periods); i++) {
+                Double eva1 = 0.0;
+                if (Integer.parseInt(getPeriods().get(i)) == periods) {
+                    eva1 = Double.parseDouble(getEvaluations().get(i)) * Double.parseDouble(getPercentage().get(i)) / 100;
+                }
                 grades.add(eva1);
             }
             sum = grades.get(0) + grades.get(1) + grades.get(2);
-            switch (period) {
+            switch (periods) {
                 case 1:
                     total = sum * 0.30;
                     break;
@@ -69,22 +81,20 @@ public class Evaluations {
 
         return total;
     }
-    */
-
-    /*GET PROM OF ALL PERIODS AUTOMATICALLY*/
+    /*
+    /*GET PROM OF ALL PERIODS AUTOMATICALLY*//*
     public Double getProm() {
         Double total = 0.0;
         Double sum;
         ArrayList<Double> grades = new ArrayList<>();
-
         //If available evaluations are more than 3
         if (getEvaluations().size() >= 3) {
-            //saving the last period evaluated on the following loop
+            //saving the last periods evaluated on the following loop
             String lastPeriod = "";
-            //getting grades per period
-            for (String period : getPeriod()) {
+            //getting grades per periods
+            for (String period : getPeriods()) {
 
-                //if the period hasn't been evaluated yet
+                //if the periods hasn't been evaluated yet
                 if (!period.equals(lastPeriod)) {
 
                     lastPeriod = period;
@@ -116,5 +126,5 @@ public class Evaluations {
 
         //returning data
         return total;
-    }
+    }*/
 }

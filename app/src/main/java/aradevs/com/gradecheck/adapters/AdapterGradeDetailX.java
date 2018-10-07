@@ -1,16 +1,17 @@
 package aradevs.com.gradecheck.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
 import aradevs.com.gradecheck.R;
-import aradevs.com.gradecheck.models.Courses;
+import aradevs.com.gradecheck.helpers.ParseJsonHelper;
+import aradevs.com.gradecheck.models.Evaluations;
 
 /**
  * Created by Ar4 on 6/10/2018.
@@ -19,10 +20,15 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
 
     //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
-    private ArrayList<Courses> items;
+    private Evaluations items;
+    private int period;
+    private static int latest = 0;
 
-    public AdapterGradeDetailX() {
 
+    public AdapterGradeDetailX(JSONObject items, int period) {
+        ParseJsonHelper pj = new ParseJsonHelper();
+        this.items = pj.parseJsonCourseEvaluations(items);
+        this.period = period;
     }
 
     @Override
@@ -35,13 +41,28 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.pb.setVisibility(View.GONE);
+
+        for (int i = latest; i < items.getPeriods().size(); i++) {
+            if (Integer.parseInt(items.getPeriods().get(i)) == this.period) {
+                holder.eva.setText(items.getDescriptions().get(i));
+                holder.percentage.setText(items.getPercentage().get(i));
+                holder.grade.setText(items.getEvaluations().get(i));
+                latest = i + 1;
+                break;
+            }
+        }
     }
 
     @Override
     public int getItemCount() {
         // return items.size();
-        return 3;
+        int count = 0;
+        for (String period : items.getPeriods()) {
+            if (Integer.parseInt(period) == this.period) {
+                count++;
+            }
+        }
+        return count;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +71,7 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
         TextView eva;
         TextView grade;
         TextView percentage;
-        ProgressBar pb;
+        Context context;
 
         ViewHolder(LinearLayout itemView) {
             super(itemView);
@@ -60,7 +81,7 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
             eva = itemView.findViewById(R.id.gradedetailEva);
             grade = itemView.findViewById(R.id.gradedetailGrade);
             percentage = itemView.findViewById(R.id.gradedetailPercentage);
-            pb = itemView.findViewById(R.id.gradedetailPbX);
+            context = itemView.getContext();
         }
     }
 }
