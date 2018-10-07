@@ -19,7 +19,7 @@ import static com.android.volley.VolleyLog.TAG;
  */
 public class ParseJsonHelper {
 
-    public ArrayList<Courses> parseJsonCourses(JSONObject jsonObject) {
+    public ArrayList<Courses> parseJsonRegisteredCourses(JSONObject jsonObject) {
         //declaring useful variables
         ArrayList<Courses> courses = new ArrayList<>();
         JSONArray registeredArray;
@@ -78,6 +78,50 @@ public class ParseJsonHelper {
             e.printStackTrace();
         }
         return courses;
+    }
+
+    public ArrayList<Courses> parseJsonCourses(JSONObject jsonObject) {
+        //declaring useful variables
+        ArrayList<Courses> courses = new ArrayList<>();
+        JSONArray registeredArray;
+        try {
+            // retrieving registered courses
+            registeredArray = jsonObject.getJSONArray("registeredCourse");
+
+            //navigating through courses
+            for (int i = 0; i < registeredArray.length(); i++) {
+                try {
+                    //fragmenting JSON in sections
+                    JSONObject registeredCourse = registeredArray.getJSONObject(i);
+                    JSONObject teacherObj = registeredCourse.getJSONObject("courseTeacher");
+                    JSONObject courseObj = teacherObj.getJSONObject("course");
+
+                    //filling evaluations model
+                    Evaluations e = new Evaluations(
+                            null,
+                            null,
+                            null
+                    );
+
+                    //filling courses model
+                    Courses c = new Courses(
+                            courseObj.getString("id"),
+                            courseObj.getString("name"),
+                            e);
+
+                    //filling courses array list
+                    courses.add(c);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json parsing Error: " + e.getMessage());
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courses;
+
     }
 
     public Users parseJsonUsers(JSONObject jsonObject) {

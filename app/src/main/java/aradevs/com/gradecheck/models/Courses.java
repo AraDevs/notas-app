@@ -39,4 +39,10 @@ public class Courses {
     public void setEva(Evaluations eva) {
         this.eva = eva;
     }
+
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

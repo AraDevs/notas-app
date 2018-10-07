@@ -27,7 +27,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
 
     public AdapterGrades(JSONObject objects) {
         ParseJsonHelper pj = new ParseJsonHelper();
-        items = pj.parseJsonCourses(objects);
+        items = pj.parseJsonRegisteredCourses(objects);
     }
 
     @Override
