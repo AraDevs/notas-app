@@ -15,6 +15,10 @@
     <string name="gradeListTitle">Notas actuales</string>
     <string name="retry">Reintentar</string>
     <string name="dummySubject">Materia bonita</string>
+    <string name="courseDetail">Detalle de materia</string>
+    <string name="approved">Aprobados</string>
+    <string name="reprobate">Reprobado</string>
+    <string name="approvePercentage">Porcentaje de aprobacion</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
