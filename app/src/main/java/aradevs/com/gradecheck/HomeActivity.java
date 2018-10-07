@@ -53,16 +53,23 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     @Override
     public void onItemClick(int position) {
         FragmentTransaction trans = HomeActivity.this.getFragmentManager().beginTransaction();
+        FragmentManager f = getFragmentManager();
 
+        f.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         //declaring position listeners for fragments
         switch (position){
             case 0:
                 GradesFragment inicio = new GradesFragment();
                 trans.replace(R.id.container, inicio, "Inicio");
+
                 break;
             case 1:
                 SubjectsFragment subjectsFragment = new SubjectsFragment();
                 trans.replace(R.id.container, subjectsFragment, "Cursos");
+                break;
+            case 2:
+                TeachersFragment teachersFragment = new TeachersFragment();
+                trans.replace(R.id.container, teachersFragment, "Docentes");
                 break;
         }
         //switching fragment

@@ -9,4 +9,7 @@ public class ServerHelper {
     //public static final String URL = "http://104.248.67.79:8080/POOSistema_NotasAPI/";
     public static final String COURSES = "registeredCourses/byStudent/";
     public static final String USER = "students/login";
+    public static final String TEACHERS = "employees/byStudent/";
+
+    public static final String CURRENT_TEACHERS = "/users/people";
 }

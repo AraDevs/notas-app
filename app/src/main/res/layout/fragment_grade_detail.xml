@@ -19,10 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center"
         android:text="@string/dummySubject"
         android:textColor="@color/textPrimary"
-        android:textSize="20sp" />
+        android:textSize="25sp"
+        android:padding="10dp"
+        android:id="@+id/gradedetailName" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gradedetailRecyclerView"
