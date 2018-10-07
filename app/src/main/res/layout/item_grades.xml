@@ -28,5 +28,12 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:id="@+id/tvGrade"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gradeId"
+            android:text=""
+            android:visibility="gone" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

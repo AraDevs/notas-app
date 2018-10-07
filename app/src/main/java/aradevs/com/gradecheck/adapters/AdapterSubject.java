@@ -1,21 +1,16 @@
 package aradevs.com.gradecheck.adapters;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import aradevs.com.gradecheck.GradeDetailFragment;
-import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Courses;
@@ -48,19 +43,6 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
         //setting on click listener to the cardview
         holder.name.setText(items.get(position).getName());
         holder.id.setText(items.get(position).getId());
-
-        holder.ln.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(holder.context, holder.id.getText(), Toast.LENGTH_SHORT).show();
-                HomeActivity activity = (HomeActivity) holder.context;
-                FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
-                GradeDetailFragment gradeDetailFragment = new GradeDetailFragment();
-                trans.replace(R.id.container, gradeDetailFragment, "Inicio");
-                trans.addToBackStack(null);
-                trans.commit();
-            }
-        });
 
     }
 
