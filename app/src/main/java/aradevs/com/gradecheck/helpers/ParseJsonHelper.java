@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import aradevs.com.gradecheck.models.Courses;
 import aradevs.com.gradecheck.models.Evaluations;
+import aradevs.com.gradecheck.models.Teachers;
 import aradevs.com.gradecheck.models.Users;
 
 import static com.android.volley.VolleyLog.TAG;
@@ -140,6 +141,46 @@ public class ParseJsonHelper {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public ArrayList<Teachers> parseJsonTeachers(JSONObject jsonObject) {
+
+        ArrayList<Teachers> teachers = new ArrayList<>();
+
+        JSONArray registeredArray;
+        try {
+            // retrieving registered courses
+            registeredArray = jsonObject.getJSONArray("employee");
+
+            //navigating through courses
+            for (int i = 0; i < registeredArray.length(); i++) {
+                try {
+                    //fragmenting JSON in sections
+                    JSONObject teacherObj = registeredArray.getJSONObject(i);
+                    JSONObject userObj = teacherObj.getJSONObject("user");
+                    JSONObject personObj = userObj.getJSONObject("person");
+
+                    Users u = new Users(userObj.getString("id"),
+                            personObj.getString("name"),
+                            personObj.getString("surname"),
+                            userObj.getString("username"),
+                            personObj.getString("phone"),
+                            personObj.getString("email"));
+
+                    Teachers t = new Teachers(teacherObj.getString("id"), u);
+                    //filling teachers array list
+                    teachers.add(t);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json parsing Error: " + e.getMessage());
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return teachers;
     }
 }
 

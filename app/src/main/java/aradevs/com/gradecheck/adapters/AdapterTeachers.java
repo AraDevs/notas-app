@@ -15,37 +15,40 @@ import java.util.ArrayList;
 
 import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
-import aradevs.com.gradecheck.SubjectDetailFragment;
+import aradevs.com.gradecheck.TeacherDetailFragment;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
-import aradevs.com.gradecheck.models.Courses;
+import aradevs.com.gradecheck.models.Teachers;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Ar4 on 6/10/2018.
+ * Created by Ar4 on 7/10/2018.
  */
-public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHolder> {
+public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHolder> {
 
     //declaring global useful variables
-    private static final String TAG = "GradesFragment-Adapter";
-    private ArrayList<Courses> items;
+    private static final String TAG = "TeachersFragment-Adapter";
+    private ArrayList<Teachers> items;
 
-    public AdapterSubject(JSONObject items) {
+    public AdapterTeachers(JSONObject items) {
         ParseJsonHelper helper = new ParseJsonHelper();
-        this.items = helper.parseJsonCourses(items);
+        this.items = helper.parseJsonTeachers(items);
     }
 
     @Override
-    public AdapterSubject.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterTeachers.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //declaring view holder
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_subjects, parent, false);
+                .inflate(R.layout.item_teachers, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
+        Teachers t = items.get(position);
         //setting on click listener to the cardview
-        holder.name.setText(items.get(position).getName());
+        String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
+        holder.name.setText(fullName);
         holder.id.setText(items.get(position).getId());
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,8 +56,8 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
 
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
-                SubjectDetailFragment subjectDetailFragment = new SubjectDetailFragment();
-                trans.replace(R.id.container, subjectDetailFragment, "Inicio");
+                TeacherDetailFragment teacherDetailFragment = new TeacherDetailFragment();
+                trans.replace(R.id.container, teacherDetailFragment, "Inicio");
                 trans.addToBackStack(null);
                 trans.commit();
             }
@@ -72,6 +75,7 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
         CardView ln;
         TextView name;
         TextView id;
+        CircleImageView image;
         Context context;
 
         ViewHolder(CardView itemView) {
@@ -79,10 +83,10 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
 
             //binding UI
             ln = itemView;
-            name = itemView.findViewById(R.id.subjectName);
-            id = itemView.findViewById(R.id.subjectId);
+            name = itemView.findViewById(R.id.teacherName);
+            id = itemView.findViewById(R.id.teacherId);
+            image = itemView.findViewById(R.id.teacherImage);
             context = itemView.getContext();
         }
     }
 }
-
