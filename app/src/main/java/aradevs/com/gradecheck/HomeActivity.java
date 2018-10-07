@@ -1,9 +1,11 @@
 package aradevs.com.gradecheck;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -59,11 +61,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 trans.replace(R.id.container, inicio, "Inicio");
                 break;
             case 1:
-                GradeDetailFragment detailFragment = new GradeDetailFragment();
-                trans.replace(R.id.container, detailFragment, "Detalle");
+                SubjectsFragment subjectsFragment = new SubjectsFragment();
+                trans.replace(R.id.container, subjectsFragment, "Cursos");
                 break;
         }
-
         //switching fragment
         trans.commit();
     }
@@ -88,4 +89,15 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             finish();
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStackImmediate();
+        }
+    }
 }

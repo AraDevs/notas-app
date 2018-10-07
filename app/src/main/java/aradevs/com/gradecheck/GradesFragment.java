@@ -72,7 +72,6 @@ public class GradesFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
                         Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
                         swiperefresh.setRefreshing(false);
                         pbGrades.setVisibility(View.GONE);
@@ -128,5 +127,6 @@ public class GradesFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 
 }

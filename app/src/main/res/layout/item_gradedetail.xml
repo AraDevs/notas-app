@@ -23,7 +23,7 @@
                 android:textSize="20sp"
                 android:layout_marginStart="10dp"
                 android:layout_gravity="center"
-                android:id="@+id/subjectName" />
+                android:id="@+id/gradedetailPeriod" />
 
             <ImageView
                 android:contentDescription="forward"
@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:src="@mipmap/ic_nextwhite"
-                android:id="@+id/subjectIcon" />
+                android:id="@+id/gradedetailIcon" />
         </LinearLayout>
 
         <!-- hidden layout -->
@@ -43,69 +43,23 @@
             android:id="@+id/expandableLayout"
             android:orientation="vertical"
             android:padding="10dp"
-            android:background="@color/nliveo_white"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:background="@color/nliveo_white">
 
-            <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/gradedetailPbX"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="5dp"
+                android:indeterminateTint="@color/colorAccent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Evaluacion:"
-                    android:textColor="@color/textPrimary"
-                    android:layout_weight="0" />
-
-                <TextView
-                    android:layout_marginStart="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:id="@+id/gradedetailRecyclerViewX">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Nota:"
-                    android:textColor="@color/textPrimary"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="9.52"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Porcentaje:"
-                    android:textColor="@color/textPrimary"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="9.52"
-                    android:layout_weight="1" />
-            </LinearLayout>
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
