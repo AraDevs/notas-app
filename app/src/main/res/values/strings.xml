@@ -20,6 +20,8 @@
     <string name="reprobate">Reprobado</string>
     <string name="approvePercentage">Porcentaje de aprobacion</string>
     <string name="teachers">Docentes</string>
+    <string name="appealTitle">Apelacion de notas</string>
+    <string name="appealDescription">Seleccione la materia para la cual sera la apelacion, esta sera remitida al docente que la imparte</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
