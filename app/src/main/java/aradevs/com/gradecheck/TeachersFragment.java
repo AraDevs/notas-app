@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import aradevs.com.gradecheck.adapters.AdapterTeachers;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -50,12 +50,11 @@ public class TeachersFragment extends Fragment {
 
     //request grades data method
     private void requestData(final View view, String id) {
-        JsonObjectRequest request = new JsonObjectRequest(
+        JsonArrayRequest request = new JsonArrayRequest(
                 ServerHelper.URL + ServerHelper.TEACHERS + id + ServerHelper.CURRENT_TEACHERS,
-                null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         teacherPb.setVisibility(View.GONE);
                         teacherRecyclerView.setHasFixedSize(true);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());

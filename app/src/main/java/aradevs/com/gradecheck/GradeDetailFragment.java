@@ -2,7 +2,6 @@ package aradevs.com.gradecheck;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,10 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import aradevs.com.gradecheck.adapters.AdapterGradeDetail;
-import aradevs.com.gradecheck.helpers.SharedHelper;
-import aradevs.com.gradecheck.models.Users;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,11 +29,11 @@ public class GradeDetailFragment extends Fragment {
     @BindView(R.id.gradedetailRecyclerView)
     RecyclerView gradedetailRecyclerView;
     //declaring useful variables
-    Context context;
     Unbinder unbinder;
     View view;
-    SharedHelper sh;
-    Users u;
+    String courseId;
+    @BindView(R.id.gradedetailName)
+    TextView gradedetailName;
 
     public GradeDetailFragment() {
         // Required empty public constructor
@@ -43,43 +41,11 @@ public class GradeDetailFragment extends Fragment {
 
     //request grades data method
     private void requestData(final View view, String id) {
-        /*
-        JsonObjectRequest request = new JsonObjectRequest(
-                ServerHelper.URL + ServerHelper.COURSES + id,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        swiperefresh.setRefreshing(false);
-                        ProgressBar pb = view.findViewById(R.id.pbGrades);
-                        pb.setVisibility(View.GONE);
-                        RecyclerView mRecyclerView = view.findViewById(R.id.gradeRecyclerView);
-                        assert mRecyclerView != null;
-                        mRecyclerView.setHasFixedSize(true);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        RecyclerView.Adapter mAdapter = new AdapterGrades(response);
-                        mRecyclerView.setAdapter(mAdapter);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error Response: ", error.getMessage());
-                        Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
-                        swiperefresh.setRefreshing(false);
-                        pbGrades.setVisibility(View.GONE);
-                    }
-                }
-        );
-        //send request to queue
-        AppSingleton.getInstance(context).addToRequestQueue(request, context);
-        */
         gradedetailPb.setVisibility(View.GONE);
         gradedetailRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
         gradedetailRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter mAdapter = new AdapterGradeDetail();
+        RecyclerView.Adapter mAdapter = new AdapterGradeDetail(id);
         gradedetailRecyclerView.setAdapter(mAdapter);
     }
 
@@ -89,6 +55,9 @@ public class GradeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_grade_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+        Bundle bundle = getArguments();
+        courseId = bundle.getString("id");
+        gradedetailName.setText(bundle.getString("name"));
         return view;
     }
 
@@ -97,7 +66,7 @@ public class GradeDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //initializing variables
         this.view = view;
-        requestData(view, "hola");
+        requestData(view, courseId);
     }
 
     @Override

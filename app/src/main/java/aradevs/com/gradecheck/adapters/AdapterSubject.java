@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
     private static final String TAG = "GradesFragment-Adapter";
     private ArrayList<Courses> items;
 
-    public AdapterSubject(JSONObject items) {
+    public AdapterSubject(JSONArray items) {
         ParseJsonHelper helper = new ParseJsonHelper();
         this.items = helper.parseJsonCourses(items);
     }

@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".GradeDetailFragment">
-
-    <ProgressBar
-        android:id="@+id/gradedetailPb"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:indeterminateTint="@color/colorAccent" />
-
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/dummySubject"
-        android:textColor="@color/textPrimary"
-        android:textSize="25sp"
-        android:padding="10dp"
-        android:id="@+id/gradedetailName" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".GradeDetailFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/gradedetailRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/gradedetailPb"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:indeterminateTint="@color/colorAccent" />
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/dummySubject"
+            android:textColor="@color/textPrimary"
+            android:textSize="25sp"
+            android:padding="10dp"
+            android:id="@+id/gradedetailName" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gradedetailRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>

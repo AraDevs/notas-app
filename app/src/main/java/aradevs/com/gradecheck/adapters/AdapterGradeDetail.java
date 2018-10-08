@@ -1,5 +1,6 @@
 package aradevs.com.gradecheck.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +10,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
 
 import aradevs.com.gradecheck.R;
-import aradevs.com.gradecheck.models.Courses;
+import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.singleton.AppSingleton;
 
 /**
  * Created by Ar4 on 6/10/2018.
@@ -22,10 +29,36 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
 
     //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
-    private ArrayList<Courses> items;
+    String id;
 
-    public AdapterGradeDetail() {
+    public AdapterGradeDetail(String id) {
+        this.id = id;
+    }
 
+    //request grades data method
+    private void requestData(final AdapterGradeDetail.ViewHolder holder, String id, final String period) {
+        JsonArrayRequest request = new JsonArrayRequest(
+                ServerHelper.URL + ServerHelper.COURSE_EVALUATIONS + id + ServerHelper.GRADES,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        holder.recyclerView.setHasFixedSize(true);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
+                        holder.recyclerView.setLayoutManager(mLayoutManager);
+                        RecyclerView.Adapter mAdapter = new AdapterGradeDetailX(response, period);
+                        holder.recyclerView.setAdapter(mAdapter);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(holder.context, "Hey", Toast.LENGTH_SHORT).show();
+                        holder.pb.setVisibility(View.GONE);
+                    }
+                }
+        );
+        //send request to queue
+        AppSingleton.getInstance(holder.context).addToRequestQueue(request, holder.context);
     }
 
     @Override
@@ -37,8 +70,10 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        String title = "Periodo " + (holder.getAdapterPosition() + 1);
+        holder.period.setText(title);
         //setting on click listener to the cardview
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,11 +85,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
                 int isExpanded = expandableLayout.getVisibility();
                 if (isExpanded == View.GONE) {
                     expandableLayout.setVisibility(View.VISIBLE);
-                    holder.recyclerView.setHasFixedSize(true);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
-                    holder.recyclerView.setLayoutManager(mLayoutManager);
-                    RecyclerView.Adapter mAdapter = new AdapterGradeDetailX();
-                    holder.recyclerView.setAdapter(mAdapter);
+                    requestData(holder, id, String.valueOf(holder.getAdapterPosition() + 1));
                 } else {
                     expandableLayout.setVisibility(View.GONE);
                 }
@@ -76,6 +107,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
         TextView period;
         ProgressBar pb;
         RecyclerView recyclerView;
+        Context context;
 
         ViewHolder(CardView itemView) {
             super(itemView);
@@ -85,6 +117,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
             period = itemView.findViewById(R.id.gradedetailPeriod);
             pb = itemView.findViewById(R.id.gradedetailPbX);
             recyclerView = itemView.findViewById(R.id.gradedetailRecyclerViewX);
+            context = itemView.getContext();
         }
     }
 }
