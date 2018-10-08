@@ -60,7 +60,8 @@ public class ParseJsonHelper {
                 Courses c = new Courses(
                         courseObj.getString("id"),
                         courseObj.getString("name"),
-                        tempEvaluation);
+                        tempEvaluation,
+                        registeredCourse.getString("id"));
 
                 //filling courses array list
                 courses.add(c);
@@ -95,7 +96,8 @@ public class ParseJsonHelper {
                 Courses c = new Courses(
                         courseObj.getString("id"),
                         courseObj.getString("name"),
-                        e);
+                        e,
+                        registeredCourse.getString("id"));
 
                 //filling courses array list
                 courses.add(c);
@@ -187,7 +189,8 @@ public class ParseJsonHelper {
                     Courses c = new Courses(
                             courseObj.getString("id"),
                             courseObj.getString("name"),
-                            e);
+                            e,
+                            registeredCourse.getString("id"));
 
                     //filling courses array list
                     courses.add(c);

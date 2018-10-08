@@ -81,7 +81,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 GradeDetailFragment gradeDetailFragment = new GradeDetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", c.getId());
+                bundle.putString("id", c.getRegistered_Course());
                 bundle.putString("name", c.getName());
                 gradeDetailFragment.setArguments(bundle);
                 trans.replace(R.id.container, gradeDetailFragment, "Inicio");
