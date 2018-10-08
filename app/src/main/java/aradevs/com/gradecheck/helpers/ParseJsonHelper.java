@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import aradevs.com.gradecheck.models.Courses;
 import aradevs.com.gradecheck.models.Evaluations;
+import aradevs.com.gradecheck.models.Success;
 import aradevs.com.gradecheck.models.Teachers;
 import aradevs.com.gradecheck.models.Users;
 
@@ -164,6 +165,34 @@ public class ParseJsonHelper {
         return teachers;
     }
 
+    public Teachers parseJsonSingleTeacher(JSONObject jsonObject) {
+
+        Teachers teachers = new Teachers();
+
+        //JSONArray registeredArray;
+        // retrieving registered courses
+        //registeredArray = jsonObject.getJSONArray("employee");
+        try {
+            //fragmenting JSON in sections
+            JSONObject userObj = jsonObject.getJSONObject("user");
+            JSONObject personObj = userObj.getJSONObject("person");
+
+            Users u = new Users(userObj.getString("id"),
+                    personObj.getString("name"),
+                    personObj.getString("surname"),
+                    userObj.getString("username"),
+                    personObj.getString("phone"),
+                    personObj.getString("email"));
+
+            teachers = new Teachers(jsonObject.getString("id"), u);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Json parsing Error: " + e.getMessage());
+        }
+
+        return teachers;
+    }
+
     public ArrayList<Courses> parseJsonTeacherCourses(JSONObject jsonObject) {
         //declaring useful variables
         ArrayList<Courses> courses = new ArrayList<>();
@@ -250,6 +279,16 @@ public class ParseJsonHelper {
         }
 
         return evaluations;
+    }
+
+    public Success parseJsonSuccess(JSONObject jsonObject) {
+        Success s = new Success();
+        try {
+            s = new Success(jsonObject.getString("passed"), jsonObject.getString("failed"), jsonObject.getString("retired"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }
 
