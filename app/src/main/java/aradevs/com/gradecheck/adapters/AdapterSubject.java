@@ -2,6 +2,7 @@ package aradevs.com.gradecheck.adapters;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,6 +55,9 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 SubjectDetailFragment subjectDetailFragment = new SubjectDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", items.get(holder.getAdapterPosition()).getRegistered_Course());
+                subjectDetailFragment.setArguments(bundle);
                 trans.replace(R.id.container, subjectDetailFragment, "Inicio");
                 trans.addToBackStack(null);
                 trans.commit();
