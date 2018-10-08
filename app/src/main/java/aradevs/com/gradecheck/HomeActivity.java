@@ -75,6 +75,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 AppealFragment appealFragment = new AppealFragment();
                 trans.replace(R.id.container, appealFragment, "Apelaciones");
                 break;
+            case 4:
+                RecentFragment recentFragment = new RecentFragment();
+                trans.replace(R.id.container, recentFragment, "Recientes");
+                break;
         }
         //switching fragment
         trans.commit();
