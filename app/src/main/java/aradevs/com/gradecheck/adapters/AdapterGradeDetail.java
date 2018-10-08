@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -36,13 +36,12 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
     }
 
     //request grades data method
-    private void requestData(final AdapterGradeDetail.ViewHolder holder, String id, final int period) {
-        JsonObjectRequest request = new JsonObjectRequest(
+    private void requestData(final AdapterGradeDetail.ViewHolder holder, String id, final String period) {
+        JsonArrayRequest request = new JsonArrayRequest(
                 ServerHelper.URL + ServerHelper.COURSE_EVALUATIONS + id + ServerHelper.GRADES,
-                null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         holder.recyclerView.setHasFixedSize(true);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
                         holder.recyclerView.setLayoutManager(mLayoutManager);
@@ -86,7 +85,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
                 int isExpanded = expandableLayout.getVisibility();
                 if (isExpanded == View.GONE) {
                     expandableLayout.setVisibility(View.VISIBLE);
-                    requestData(holder, id, (holder.getAdapterPosition() + 1));
+                    requestData(holder, id, String.valueOf(holder.getAdapterPosition() + 1));
                 } else {
                     expandableLayout.setVisibility(View.GONE);
                 }

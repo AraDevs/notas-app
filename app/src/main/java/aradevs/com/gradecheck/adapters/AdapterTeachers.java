@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
     private static final String TAG = "TeachersFragment-Adapter";
     private ArrayList<Teachers> items;
 
-    public AdapterTeachers(JSONObject items) {
+    public AdapterTeachers(JSONArray items) {
         ParseJsonHelper helper = new ParseJsonHelper();
         this.items = helper.parseJsonTeachers(items);
     }

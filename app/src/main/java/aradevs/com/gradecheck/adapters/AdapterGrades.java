@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,7 @@ import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Courses;
+import aradevs.com.gradecheck.models.Evaluations;
 
 /**
  * Created by Ar4 on 25/08/2018.
@@ -33,7 +34,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
     private ArrayList<Courses> items;
 
 
-    public AdapterGrades(JSONObject objects) {
+    public AdapterGrades(JSONArray objects) {
         ParseJsonHelper pj = new ParseJsonHelper();
         items = pj.parseJsonRegisteredCourses(objects);
     }
@@ -55,11 +56,11 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         ArrayList<Double> grades = new ArrayList<>();
 
         //retrieving evaluations info
-        int p = c.getEva().getEvaluations().size() / 3;
+        int p = c.getEva().size() / 3;
         for (int i = 1; i <= p; i++) {
-            grades.add(c.getEva().getProm(i));
+            grades.add(new Evaluations().getProm(c.getEva(), i));
         }
-        Log.e("items size", String.valueOf(c.getEva().getEvaluations().size()));
+        Log.e("items size", String.valueOf(c.getEva().size()));
         for (double item : grades) {
             tot += item;
         }

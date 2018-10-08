@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
@@ -20,12 +22,11 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
 
     //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
-    private Evaluations items;
-    private int period;
-    private static int latest = 0;
+    private ArrayList<Evaluations> items;
+    private String period;
+    private int latest = 0;
 
-
-    public AdapterGradeDetailX(JSONObject items, int period) {
+    public AdapterGradeDetailX(JSONArray items, String period) {
         ParseJsonHelper pj = new ParseJsonHelper();
         this.items = pj.parseJsonCourseEvaluations(items);
         this.period = period;
@@ -42,11 +43,11 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        for (int i = latest; i < items.getPeriods().size(); i++) {
-            if (Integer.parseInt(items.getPeriods().get(i)) == this.period) {
-                holder.eva.setText(items.getDescriptions().get(i));
-                holder.percentage.setText(items.getPercentage().get(i));
-                holder.grade.setText(items.getEvaluations().get(i));
+        for (int i = latest; i < items.size(); i++) {
+            if (items.get(i).getPeriods().equals(this.period)) {
+                holder.eva.setText(items.get(i).getDescriptions());
+                holder.percentage.setText(items.get(i).getPercentage().trim());
+                holder.grade.setText(items.get(i).getEvaluations().trim());
                 latest = i + 1;
                 break;
             }
@@ -55,10 +56,10 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
 
     @Override
     public int getItemCount() {
-        // return items.size();
         int count = 0;
-        for (String period : items.getPeriods()) {
-            if (Integer.parseInt(period) == this.period) {
+
+        for (Evaluations period : items) {
+            if (period.getPeriods().equals(this.period)) {
                 count++;
             }
         }
