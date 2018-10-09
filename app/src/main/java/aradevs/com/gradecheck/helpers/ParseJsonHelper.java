@@ -40,12 +40,13 @@ public class ParseJsonHelper {
                 JSONObject teacherObj = registeredCourse.getJSONObject("courseTeacher");
                 JSONObject courseObj = teacherObj.getJSONObject("course");
                 JSONArray evaArray = registeredCourse.getJSONArray("grades");
-                if (!courseObj.getBoolean("laboratory")) {
-                    for (int j = 0; j < evaArray.length(); j++) {
-                        //obtaining current evaluations
-                        JSONObject evaObject = evaArray.getJSONObject(j);
-                        JSONObject currentEva = evaObject.getJSONObject("evaluation");
 
+
+                for (int j = 0; j < evaArray.length(); j++) {
+                    //obtaining current evaluations
+                    JSONObject evaObject = evaArray.getJSONObject(j);
+                    JSONObject currentEva = evaObject.getJSONObject("evaluation");
+                    if (!currentEva.getBoolean("laboratory")) {
                         //filling evaluations model
                         Evaluations e = new Evaluations(
                                 currentEva.getString("description"),
@@ -55,18 +56,19 @@ public class ParseJsonHelper {
                         );
                         tempEvaluation.add(e);
                     }
-
-
-                    //filling courses model
-                    Courses c = new Courses(
-                            courseObj.getString("id"),
-                            courseObj.getString("name"),
-                            tempEvaluation,
-                            registeredCourse.getString("id"));
-
-                    //filling courses array list
-                    courses.add(c);
                 }
+
+
+                //filling courses model
+                Courses c = new Courses(
+                        courseObj.getString("id"),
+                        courseObj.getString("name"),
+                        tempEvaluation,
+                        registeredCourse.getString("id"));
+
+                //filling courses array list
+                courses.add(c);
+
             } catch (JSONException e) {
                 Log.e(TAG, "Json parsing Error: " + e.getMessage());
             }
