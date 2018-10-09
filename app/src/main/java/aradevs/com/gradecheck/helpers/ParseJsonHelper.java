@@ -269,12 +269,15 @@ public class ParseJsonHelper {
                 //obtaining current evaluations
                 JSONObject evaObject = jsonObject.getJSONObject(i);
                 JSONArray grade = evaObject.getJSONArray("grades");
-                Evaluations tempEva = new Evaluations();
-                tempEva.setDescriptions(evaObject.getString("description"));
-                tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
-                tempEva.setPercentage(evaObject.getString("percentage"));
-                tempEva.setPeriods(evaObject.getString("period"));
-                evaluations.add(tempEva);
+                if (!evaObject.getBoolean("laboratory")) {
+                    Evaluations tempEva = new Evaluations();
+                    tempEva.setDescriptions(evaObject.getString("description"));
+                    tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
+                    tempEva.setPercentage(evaObject.getString("percentage"));
+                    tempEva.setPeriods(evaObject.getString("period"));
+                    evaluations.add(tempEva);
+                }
+
             } catch (JSONException e) {
                 Log.e(TAG, "Json parsing Error: " + e.getMessage());
             }
