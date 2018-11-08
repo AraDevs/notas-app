@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.TeacherDetailFragment;
+import aradevs.com.gradecheck.helpers.ImagesHelper;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
+import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.models.Teachers;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,10 +53,14 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
         holder.name.setText(fullName);
         holder.id.setText(items.get(position).getId());
+        //obtaining images
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + items.get(position).getUsers().getId(),
+                holder.image,
+                holder.context);
+        //setting onclick listener
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 TeacherDetailFragment teacherDetailFragment = new TeacherDetailFragment();

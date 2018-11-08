@@ -122,7 +122,8 @@ public class ParseJsonHelper {
 
         try {
             JSONObject userJson = jsonObject.getJSONObject("user");
-            users.setId(jsonObject.getString("id"));
+            users.setId(userJson.getJSONObject("person").getString("id"));
+            users.setPersonId(jsonObject.getString("id"));
             users.setEmail(userJson.getJSONObject("person").getString("email"));
             users.setName(userJson.getJSONObject("person").getString("name"));
             users.setPhone(userJson.getJSONObject("person").getString("phone"));
@@ -150,7 +151,8 @@ public class ParseJsonHelper {
                 JSONObject userObj = teacherObj.getJSONObject("user");
                 JSONObject personObj = userObj.getJSONObject("person");
 
-                Users u = new Users(userObj.getString("id"),
+                Users u = new Users(personObj.getString("id"),
+                        userObj.getString("id"),
                         personObj.getString("name"),
                         personObj.getString("surname"),
                         userObj.getString("username"),
@@ -181,7 +183,8 @@ public class ParseJsonHelper {
             JSONObject userObj = jsonObject.getJSONObject("user");
             JSONObject personObj = userObj.getJSONObject("person");
 
-            Users u = new Users(userObj.getString("id"),
+            Users u = new Users(personObj.getString("id"),
+                    userObj.getString("id"),
                     personObj.getString("name"),
                     personObj.getString("surname"),
                     userObj.getString("username"),

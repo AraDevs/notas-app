@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import aradevs.com.gradecheck.helpers.ImagesHelper;
+import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.SharedHelper;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
@@ -28,7 +30,12 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         // User Information
         this.userName.setText(sh.getUser().getName());
         this.userEmail.setText(sh.getUser().getEmail());
-        this.userPhoto.setImageResource(R.drawable.g);
+
+        //getting image
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + sh.getUser().getId(),
+                this.userPhoto,
+                getApplicationContext());
+
         this.userBackground.setImageResource(R.drawable.background);
 
         // Creating items navigation

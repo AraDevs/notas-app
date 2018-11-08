@@ -105,7 +105,7 @@ public class SubjectsFragment extends Fragment {
         context = getActivity().getApplicationContext();
         //requesting grades data
         try {
-            requestData(getView(), u.getId());
+            requestData(getView(), u.getPersonId());
         } catch (Exception e) {
             Log.e("Skipped request data", "Probably cleaning fragment");
         }

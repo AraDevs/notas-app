@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import aradevs.com.gradecheck.adapters.AdapterTeacherSubjects;
 import aradevs.com.gradecheck.helpers.ClipboardHelper;
+import aradevs.com.gradecheck.helpers.ImagesHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.models.Teachers;
 import aradevs.com.gradecheck.singleton.AppSingleton;
@@ -104,6 +105,10 @@ public class TeacherDetailFragment extends Fragment {
         // Required empty public constructor
         context = view.getContext();
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
+        //obtaining images
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + t.getUsers().getId(),
+                teacherdetailImage,
+                getActivity().getApplicationContext());
         teacherdetailName.setText(fullName);
         teacherdetailEmail.setText(t.getUsers().getEmail());
     }
