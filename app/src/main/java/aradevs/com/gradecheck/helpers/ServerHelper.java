@@ -21,4 +21,5 @@ public class ServerHelper {
     public static final String CURRENT_TEACHERS = "/users/people";
     public static final String ALL = "/full";
     public static final String GRADES = "/grades";
+    public static final String CORRECTIONS = "corrections";
 }
