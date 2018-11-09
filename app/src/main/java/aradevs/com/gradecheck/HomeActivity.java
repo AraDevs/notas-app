@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -21,7 +23,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     //Shared preferences helper
     SharedHelper sh;
-
+    private static final int READ_REQUEST_CODE = 42;
     @SuppressLint("SetTextI18n")
     @Override
     public void onInt(Bundle savedInstanceState) {
@@ -122,4 +124,17 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             fm.popBackStackImmediate();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.e("Permiso", "Permission: " + permissions[0] + "was " + grantResults[0]);
+            //resume tasks needing this permission
+        }
+    }
+
+
+
+
 }

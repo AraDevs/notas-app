@@ -21,7 +21,7 @@
     <string name="approvePercentage">Porcentaje de aprobacion</string>
     <string name="teachers">Docentes</string>
     <string name="appealTitle">Apelacion de notas</string>
-    <string name="appealDescription">Seleccione la materia para la cual sera la apelacion, esta sera remitida al docente que la imparte</string>
+    <string name="appealDescription">Ingrese la descripcion por la cual solicita la apelacion, ademas puede adjuntar un archivo para justificar. Para multiples archivos se recomienda comprimirlos en .zip</string>
     <string name="recentTitle">Ultima actividad</string>
 
     <!-- TODO: Remove or change this placeholder text -->

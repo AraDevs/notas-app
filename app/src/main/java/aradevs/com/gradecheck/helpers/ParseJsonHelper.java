@@ -52,7 +52,8 @@ public class ParseJsonHelper {
                                 currentEva.getString("description"),
                                 currentEva.getString("period"),
                                 evaObject.getString("grade"),
-                                currentEva.getString("percentage")
+                                currentEva.getString("percentage"),
+                                evaObject.getString("id")
                         );
                         tempEvaluation.add(e);
                     }
@@ -281,6 +282,7 @@ public class ParseJsonHelper {
                     tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
                     tempEva.setPercentage(evaObject.getString("percentage"));
                     tempEva.setPeriods(evaObject.getString("period"));
+                    tempEva.setGradeId(grade.getJSONObject(0).getString("id"));
                     evaluations.add(tempEva);
                 }
 
