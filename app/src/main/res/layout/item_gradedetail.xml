@@ -44,8 +44,7 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:visibility="gone"
-            android:background="@color/nliveo_white"
-            android:animateLayoutChanges="true">
+            android:background="@color/nliveo_white">
 
             <ProgressBar
                 android:id="@+id/gradedetailPbX"

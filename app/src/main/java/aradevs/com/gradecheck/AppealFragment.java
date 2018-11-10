@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +25,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bikomobile.multipart.Multipart;
 import com.bikomobile.multipart.MultipartRequest;
-import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
-import com.github.developerpaul123.filepickerlibrary.enums.Request;
-import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.ZipHelper;
@@ -38,6 +38,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.ContentValues.TAG;
+
+/*
+import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;*/
 
 
 /**
@@ -61,8 +68,12 @@ public class AppealFragment extends Fragment {
     Button appealRemoveFile;
 
     String zipPath = "/storage/emulated/0/tempGradeCheck.zip";
-    String path = "";
-    String id;
+    String id = "";
+    Uri tempUri = null;
+    @BindView(R.id.appealLoading)
+    LinearLayout appealLoading;
+    @BindView(R.id.appealViewContainer)
+    LinearLayout appealViewContainer;
 
     public AppealFragment() {
         // Required empty public constructor
@@ -90,30 +101,37 @@ public class AppealFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.appealFile:
+                //check if we have the permissions to read the external storage
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        Intent filePickerDialog = new Intent(getActivity(), FilePickerActivity.class);
-                        filePickerDialog.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.ACTIVITY);
-                        filePickerDialog.putExtra(FilePickerActivity.REQUEST, Request.FILE);
-                        startActivityForResult(filePickerDialog, 42);
+                        Intent filePicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        filePicker.addCategory(Intent.CATEGORY_OPENABLE);
+                        filePicker.setType("image/*");
+                        startActivityForResult(filePicker, 42);
                     } else {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                     }
                 }
                 break;
             case R.id.appealSend:
+                //calling zip helper
                 ZipHelper zh = new ZipHelper();
+                InputStream is;
+                File f;
                 try {
-                    if (!path.equals("")) {
-                        zh.zip(path, zipPath, getActivity());
+                    //if there's a file path, compress it
+                    if (tempUri != null) {
+                        is = getActivity().getContentResolver().openInputStream(tempUri);
+                        f = new File(Objects.requireNonNull(tempUri.getPath()));
+                        zh.zip(is, zipPath, f.getName());
                     }
-                    Uri uri = Uri.parse(zipPath);
-                    File f = new File(zipPath);
-                    Log.e("URI", uri.getPath());
-
+                    //initialize the multipart request
                     Multipart multipart = new Multipart(getActivity().getApplicationContext());
-                    if (!path.equals("")) {
-                        multipart.addFile("application/zip", "filePath", f.getName(), uri);
+
+                    //if there's a file, add it to the form data
+                    if (tempUri != null) {
+                        Uri zipUri = Uri.parse(zipPath);
+                        multipart.addFile("application/zip", "filePath", "tempGradeCheck.zip", zipUri);
                     }
                     multipart.addParam("description", appealDescription.getText().toString());
                     multipart.addParam("gradeId", id);
@@ -121,24 +139,32 @@ public class AppealFragment extends Fragment {
                     MultipartRequest multipartRequest = multipart.getRequest(ServerHelper.URL + ServerHelper.CORRECTIONS, new Response.Listener<NetworkResponse>() {
                         @Override
                         public void onResponse(NetworkResponse response) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                            //notifying about changes
+                            Toast.makeText(getActivity().getApplicationContext(), "Enviado con exito", Toast.LENGTH_LONG).show();
+                            cleanFile();
+                            appealDescription.setText("");
+                            disableLoading();
+                            //returning to grades fragment
+                            getFragmentManager().popBackStackImmediate();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                            disableLoading();
                         }
                     });
                     //send request to queue
                     AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(multipartRequest, getActivity().getApplicationContext());
+                    enableLoading();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.appealRemoveFile:
-                appealFilePath.setText("");
-                appealFileText.setText("Sin archivo");
-                appealRemoveFile.setVisibility(View.GONE);
+                //remove the file variables
+                cleanFile();
                 break;
         }
     }
@@ -146,10 +172,33 @@ public class AppealFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(getActivity().getApplicationContext(), "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
-            File f = new File(data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH));
-            appealFileText.setText(f.getName());
-            path = f.getAbsolutePath();
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                assert uri != null;
+                tempUri = uri;
+                File f = new File(Objects.requireNonNull(uri.getPath()));
+                appealFileText.setText(f.getName());
+                appealRemoveFile.setVisibility(View.VISIBLE);
+                Log.e(TAG, "Uri: " + uri.toString());
+            }
         }
+    }
+
+    private void cleanFile() {
+        appealFilePath.setText("");
+        appealFileText.setText("Sin archivo");
+        tempUri = null;
+        appealRemoveFile.setVisibility(View.GONE);
+    }
+
+    private void enableLoading() {
+        appealLoading.setVisibility(View.VISIBLE);
+        appealViewContainer.setVisibility(View.GONE);
+    }
+
+    private void disableLoading() {
+        appealLoading.setVisibility(View.GONE);
+        appealViewContainer.setVisibility(View.VISIBLE);
     }
 }
