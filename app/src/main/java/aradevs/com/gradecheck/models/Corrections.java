@@ -1,11 +1,13 @@
 package aradevs.com.gradecheck.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * Created by Ar4 on 9/11/2018.
  */
-public class Corrections {
+public class Corrections implements Parcelable {
     private String id;
     private String description;
     private String owner;
@@ -19,6 +21,25 @@ public class Corrections {
         this.description = description;
         this.owner = owner;
         this.state = state;
+    }
+
+    public static final Creator<Corrections> CREATOR = new Creator<Corrections>() {
+        @Override
+        public Corrections createFromParcel(Parcel in) {
+            return new Corrections(in);
+        }
+
+        @Override
+        public Corrections[] newArray(int size) {
+            return new Corrections[size];
+        }
+    };
+
+    protected Corrections(Parcel in) {
+        id = in.readString();
+        description = in.readString();
+        owner = in.readString();
+        state = in.readString();
     }
 
     public String getId() {
@@ -57,5 +78,18 @@ public class Corrections {
     @Override
     public String toString() {
         return description;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(description);
+        dest.writeString(owner);
+        dest.writeString(state);
     }
 }

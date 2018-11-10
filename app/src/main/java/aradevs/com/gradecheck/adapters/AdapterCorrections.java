@@ -1,6 +1,8 @@
 package aradevs.com.gradecheck.adapters;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import aradevs.com.gradecheck.CorrectionDetailFragment;
+import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Corrections;
@@ -39,7 +43,7 @@ public class AdapterCorrections extends RecyclerView.Adapter<AdapterCorrections.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         //setting on click listener to the cardview
         holder.description.setText(items.get(position).getDescription());
@@ -47,17 +51,15 @@ public class AdapterCorrections extends RecyclerView.Adapter<AdapterCorrections.
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
-                SubjectDetailFragment subjectDetailFragment = new SubjectDetailFragment();
+                CorrectionDetailFragment correctionDetailFragment = new CorrectionDetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", items.get(holder.getAdapterPosition()).getRegistered_Course());
-                subjectDetailFragment.setArguments(bundle);
-                trans.replace(R.id.container, subjectDetailFragment, "Inicio");
+                bundle.putParcelable("correction", items.get(holder.getAdapterPosition()));
+                correctionDetailFragment.setArguments(bundle);
+                trans.replace(R.id.container, correctionDetailFragment, "Inicio");
                 trans.addToBackStack(null);
                 trans.commit();
-                */
             }
         });
 
