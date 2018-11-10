@@ -9,11 +9,14 @@
 
         <ProgressBar
             android:id="@+id/gradedetailPb"
-            android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:indeterminateTint="@color/colorAccent" />
+            android:layout_width="match_parent"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorAccent"
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="match_parent"

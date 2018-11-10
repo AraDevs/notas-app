@@ -41,19 +41,22 @@ public class ParseJsonHelper {
                 JSONObject courseObj = teacherObj.getJSONObject("course");
                 JSONArray evaArray = registeredCourse.getJSONArray("grades");
 
+
                 for (int j = 0; j < evaArray.length(); j++) {
                     //obtaining current evaluations
                     JSONObject evaObject = evaArray.getJSONObject(j);
                     JSONObject currentEva = evaObject.getJSONObject("evaluation");
-
-                    //filling evaluations model
-                    Evaluations e = new Evaluations(
-                            currentEva.getString("description"),
-                            currentEva.getString("period"),
-                            evaObject.getString("grade"),
-                            currentEva.getString("percentage")
-                    );
-                    tempEvaluation.add(e);
+                    if (!currentEva.getBoolean("laboratory")) {
+                        //filling evaluations model
+                        Evaluations e = new Evaluations(
+                                currentEva.getString("description"),
+                                currentEva.getString("period"),
+                                evaObject.getString("grade"),
+                                currentEva.getString("percentage"),
+                                evaObject.getString("id")
+                        );
+                        tempEvaluation.add(e);
+                    }
                 }
 
 
@@ -62,7 +65,8 @@ public class ParseJsonHelper {
                         courseObj.getString("id"),
                         courseObj.getString("name"),
                         tempEvaluation,
-                        registeredCourse.getString("id"));
+                        registeredCourse.getString("id"),
+                        courseObj.getString("uv"));
 
                 //filling courses array list
                 courses.add(c);
@@ -98,7 +102,8 @@ public class ParseJsonHelper {
                         courseObj.getString("id"),
                         courseObj.getString("name"),
                         e,
-                        registeredCourse.getString("id"));
+                        registeredCourse.getString("id"),
+                        courseObj.getString("uv"));
 
                 //filling courses array list
                 courses.add(c);
@@ -118,7 +123,8 @@ public class ParseJsonHelper {
 
         try {
             JSONObject userJson = jsonObject.getJSONObject("user");
-            users.setId(jsonObject.getString("id"));
+            users.setId(userJson.getJSONObject("person").getString("id"));
+            users.setPersonId(jsonObject.getString("id"));
             users.setEmail(userJson.getJSONObject("person").getString("email"));
             users.setName(userJson.getJSONObject("person").getString("name"));
             users.setPhone(userJson.getJSONObject("person").getString("phone"));
@@ -146,7 +152,8 @@ public class ParseJsonHelper {
                 JSONObject userObj = teacherObj.getJSONObject("user");
                 JSONObject personObj = userObj.getJSONObject("person");
 
-                Users u = new Users(userObj.getString("id"),
+                Users u = new Users(personObj.getString("id"),
+                        userObj.getString("id"),
                         personObj.getString("name"),
                         personObj.getString("surname"),
                         userObj.getString("username"),
@@ -177,7 +184,8 @@ public class ParseJsonHelper {
             JSONObject userObj = jsonObject.getJSONObject("user");
             JSONObject personObj = userObj.getJSONObject("person");
 
-            Users u = new Users(userObj.getString("id"),
+            Users u = new Users(personObj.getString("id"),
+                    userObj.getString("id"),
                     personObj.getString("name"),
                     personObj.getString("surname"),
                     userObj.getString("username"),
@@ -219,7 +227,8 @@ public class ParseJsonHelper {
                             courseObj.getString("id"),
                             courseObj.getString("name"),
                             e,
-                            registeredCourse.getString("id"));
+                            registeredCourse.getString("id"),
+                            courseObj.getString("uv"));
 
                     //filling courses array list
                     courses.add(c);
@@ -267,12 +276,16 @@ public class ParseJsonHelper {
                 //obtaining current evaluations
                 JSONObject evaObject = jsonObject.getJSONObject(i);
                 JSONArray grade = evaObject.getJSONArray("grades");
-                Evaluations tempEva = new Evaluations();
-                tempEva.setDescriptions(evaObject.getString("description"));
-                tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
-                tempEva.setPercentage(evaObject.getString("percentage"));
-                tempEva.setPeriods(evaObject.getString("period"));
-                evaluations.add(tempEva);
+                if (!evaObject.getBoolean("laboratory")) {
+                    Evaluations tempEva = new Evaluations();
+                    tempEva.setDescriptions(evaObject.getString("description"));
+                    tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
+                    tempEva.setPercentage(evaObject.getString("percentage"));
+                    tempEva.setPeriods(evaObject.getString("period"));
+                    tempEva.setGradeId(grade.getJSONObject(0).getString("id"));
+                    evaluations.add(tempEva);
+                }
+
             } catch (JSONException e) {
                 Log.e(TAG, "Json parsing Error: " + e.getMessage());
             }

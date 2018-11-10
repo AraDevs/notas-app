@@ -5,6 +5,7 @@ package aradevs.com.gradecheck.models;
  */
 public class Users {
     private String id;
+    private String personId;
     private String name;
     private String surname;
     private String username;
@@ -13,8 +14,9 @@ public class Users {
 
     public Users() {}
 
-    public Users(String id, String name, String surname, String username, String phone, String email) {
+    public Users(String id, String personId, String name, String surname, String username, String phone, String email) {
         this.id = id;
+        this.personId = personId;
         this.name = name;
         this.surname = surname;
         this.username = username;
@@ -28,6 +30,14 @@ public class Users {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
     public String getName() {

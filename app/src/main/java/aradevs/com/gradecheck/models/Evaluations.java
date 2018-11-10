@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Created by Ar4 on 25/08/2018.
  */
 public class Evaluations {
+    private String gradeId;
     private String descriptions;
     private String periods;
     private String evaluations;
@@ -15,11 +16,19 @@ public class Evaluations {
 
     public Evaluations() {}
 
-    public Evaluations(String descriptions, String periods, String evaluations, String percentage) {
+    public Evaluations(String descriptions, String periods, String evaluations, String percentage, String gradeId) {
         this.descriptions = descriptions;
         this.periods = periods;
         this.evaluations = evaluations;
         this.percentage = percentage;
+    }
+
+    public String getGradeId() {
+        return gradeId;
+    }
+
+    public void setGradeId(String gradeId) {
+        this.gradeId = gradeId;
     }
 
     public String getDescriptions() {

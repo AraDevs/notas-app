@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -76,7 +75,6 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.context, holder.id.getText(), Toast.LENGTH_SHORT).show();
                 HomeActivity activity = (HomeActivity) holder.context;
                 FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
                 GradeDetailFragment gradeDetailFragment = new GradeDetailFragment();

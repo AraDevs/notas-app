@@ -1,9 +1,13 @@
 package aradevs.com.gradecheck.adapters;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,6 +15,8 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import aradevs.com.gradecheck.AppealFragment;
+import aradevs.com.gradecheck.HomeActivity;
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.models.Evaluations;
@@ -41,13 +47,29 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         for (int i = latest; i < items.size(); i++) {
             if (items.get(i).getPeriods().equals(this.period)) {
                 holder.eva.setText(items.get(i).getDescriptions());
                 holder.percentage.setText(items.get(i).getPercentage().trim());
                 holder.grade.setText(items.get(i).getEvaluations().trim());
+                final int finalI = i;
+                holder.correction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        HomeActivity activity = (HomeActivity) holder.context;
+                        FragmentTransaction trans = activity.getFragmentManager().beginTransaction();
+                        AppealFragment appealFragment = new AppealFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", items.get(finalI).getGradeId());
+                        appealFragment.setArguments(bundle);
+                        trans.replace(R.id.container, appealFragment, "Inicio");
+                        trans.addToBackStack(null);
+                        trans.commit();
+                    }
+                });
                 latest = i + 1;
                 break;
             }
@@ -72,6 +94,7 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
         TextView eva;
         TextView grade;
         TextView percentage;
+        Button correction;
         Context context;
 
         ViewHolder(LinearLayout itemView) {
@@ -82,6 +105,7 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
             eva = itemView.findViewById(R.id.gradedetailEva);
             grade = itemView.findViewById(R.id.gradedetailGrade);
             percentage = itemView.findViewById(R.id.gradedetailPercentage);
+            correction = itemView.findViewById(R.id.gradeDetailCorrection);
             context = itemView.getContext();
         }
     }

@@ -4,11 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import aradevs.com.gradecheck.helpers.ImagesHelper;
+import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.SharedHelper;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
@@ -19,7 +23,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     //Shared preferences helper
     SharedHelper sh;
-
+    private static final int READ_REQUEST_CODE = 42;
     @SuppressLint("SetTextI18n")
     @Override
     public void onInt(Bundle savedInstanceState) {
@@ -28,7 +32,12 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         // User Information
         this.userName.setText(sh.getUser().getName());
         this.userEmail.setText(sh.getUser().getEmail());
-        this.userPhoto.setImageResource(R.drawable.g);
+
+        //getting image
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + sh.getUser().getId(),
+                this.userPhoto,
+                getApplicationContext());
+
         this.userBackground.setImageResource(R.drawable.background);
 
         // Creating items navigation
@@ -71,6 +80,14 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 TeachersFragment teachersFragment = new TeachersFragment();
                 trans.replace(R.id.container, teachersFragment, "Docentes");
                 break;
+            case 3:
+                AppealFragment appealFragment = new AppealFragment();
+                trans.replace(R.id.container, appealFragment, "Apelaciones");
+                break;
+            case 4:
+                RecentFragment recentFragment = new RecentFragment();
+                trans.replace(R.id.container, recentFragment, "Recientes");
+                break;
         }
         //switching fragment
         trans.commit();
@@ -107,4 +124,17 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             fm.popBackStackImmediate();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.e("Permiso", "Permission: " + permissions[0] + "was " + grantResults[0]);
+            //resume tasks needing this permission
+        }
+    }
+
+
+
+
 }

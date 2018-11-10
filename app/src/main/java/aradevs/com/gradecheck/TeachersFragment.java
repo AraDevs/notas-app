@@ -96,7 +96,7 @@ public class TeachersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestData(getView(), u.getId());
+        requestData(getView(), u.getPersonId());
     }
 
     @Override

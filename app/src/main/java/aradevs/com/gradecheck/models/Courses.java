@@ -9,15 +9,17 @@ public class Courses {
     private String id;
     private String registered_Course;
     private String name;
+    private String uv;
     private ArrayList<Evaluations> eva;
 
     public Courses() {}
 
-    public Courses(String id, String name, ArrayList<Evaluations> eva, String registered_Course) {
+    public Courses(String id, String name, ArrayList<Evaluations> eva, String registered_Course, String uv) {
         this.id = id;
         this.name = name;
         this.eva = eva;
         this.registered_Course = registered_Course;
+        this.uv = uv;
     }
 
     public String getId() {
@@ -50,6 +52,14 @@ public class Courses {
 
     public void setRegistered_Course(String registered_Course) {
         this.registered_Course = registered_Course;
+    }
+
+    public String getUv() {
+        return uv;
+    }
+
+    public void setUv(String uv) {
+        this.uv = uv;
     }
 
     @Override

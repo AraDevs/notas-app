@@ -45,9 +45,13 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
+        String uvText;
+
         //setting on click listener to the cardview
         holder.name.setText(items.get(position).getName());
         holder.id.setText(items.get(position).getId());
+        uvText = "UV: " + items.get(position).getUv();
+        holder.uv.setText(uvText);
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +80,7 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
         CardView ln;
         TextView name;
         TextView id;
+        TextView uv;
         Context context;
 
         ViewHolder(CardView itemView) {
@@ -85,6 +90,7 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.ViewHold
             ln = itemView;
             name = itemView.findViewById(R.id.subjectName);
             id = itemView.findViewById(R.id.subjectId);
+            uv = itemView.findViewById(R.id.subjectUv);
             context = itemView.getContext();
         }
     }

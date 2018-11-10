@@ -3,6 +3,7 @@ package aradevs.com.gradecheck;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -120,9 +121,22 @@ public class SubjectDetailFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         ParseJsonHelper ph = new ParseJsonHelper();
-                        Teachers t = ph.parseJsonSingleTeacher(response);
+                        final Teachers t = ph.parseJsonSingleTeacher(response);
                         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
                         subjectDetailTeacher.setText(fullName);
+                        subjectDetailTeacher.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FragmentTransaction trans = getActivity().getFragmentManager().beginTransaction();
+                                TeacherDetailFragment teacherDetailFragment = new TeacherDetailFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("teacher", t);
+                                teacherDetailFragment.setArguments(bundle);
+                                trans.replace(R.id.container, teacherDetailFragment, "Inicio");
+                                trans.addToBackStack(null);
+                                trans.commit();
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

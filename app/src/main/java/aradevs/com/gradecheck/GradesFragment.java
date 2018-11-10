@@ -100,7 +100,7 @@ public class GradesFragment extends Fragment {
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestData(view, u.getId());
+                requestData(view, u.getPersonId());
             }
         });
         sh = new SharedHelper(getActivity());
@@ -117,7 +117,7 @@ public class GradesFragment extends Fragment {
         view = getView();
 
         //requesting grades data
-        requestData(view, u.getId());
+        requestData(view, u.getPersonId());
         Log.e("Memory", String.valueOf(Runtime.getRuntime().totalMemory()));
     }
 

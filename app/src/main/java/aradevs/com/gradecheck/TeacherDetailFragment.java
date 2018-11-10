@@ -21,11 +21,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 import aradevs.com.gradecheck.adapters.AdapterTeacherSubjects;
+import aradevs.com.gradecheck.helpers.ClipboardHelper;
+import aradevs.com.gradecheck.helpers.ImagesHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.models.Teachers;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +39,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TeacherDetailFragment extends Fragment {
 
     private static Teachers t = new Teachers();
+    @BindView(R.id.teacherdetailCopy)
+    TextView teacherdetailCopy;
     private Context context;
     @BindView(R.id.teacherdetailPb)
     ProgressBar teacherdetailPb;
@@ -100,6 +105,10 @@ public class TeacherDetailFragment extends Fragment {
         // Required empty public constructor
         context = view.getContext();
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
+        //obtaining images
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + t.getUsers().getId(),
+                teacherdetailImage,
+                getActivity().getApplicationContext());
         teacherdetailName.setText(fullName);
         teacherdetailEmail.setText(t.getUsers().getEmail());
     }
@@ -114,5 +123,11 @@ public class TeacherDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         //unbinder.unbind();
+    }
+
+    @OnClick(R.id.teacherdetailCopy)
+    public void onViewClicked() {
+        ClipboardHelper ch = new ClipboardHelper();
+        ch.copyToClipBoard(getActivity(), "Email", teacherdetailEmail.getText());
     }
 }
