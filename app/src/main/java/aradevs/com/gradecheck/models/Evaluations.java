@@ -68,19 +68,27 @@ public class Evaluations {
         Double total = 0.0;
         Double sum = 0.0;
         ArrayList<Double> grades = new ArrayList<>();
-
-        if (evaluations.size() >= 3) {
+        Double percentage = 0.0;
+        for (int e = 0; e < evaluations.size(); e++) {
+            if (Integer.parseInt(evaluations.get(e).getPeriods()) == periods) {
+                percentage += Double.parseDouble(evaluations.get(e).getPercentage());
+            }
+        }
+        Log.e("Porcentage", String.valueOf(percentage));
+        if (percentage == 100) {
             for (int i = 0; i < evaluations.size(); i++) {
                 Double eva1 = 0.0;
                 if (Integer.parseInt(evaluations.get(i).getPeriods()) == periods) {
                     eva1 = Double.parseDouble(evaluations.get(i).getEvaluations()) * Double.parseDouble(evaluations.get(i).getPercentage()) / 100;
+                    Log.e("Nota", String.valueOf(eva1));
+                    grades.add(eva1);
                 }
-                Log.e("Nota", String.valueOf(eva1));
-                grades.add(eva1);
+
             }
             for (Double grade : grades) {
                 sum += grade;
             }
+            Log.e("Suma total", String.valueOf(sum));
             switch (periods) {
                 case 1:
                     total = sum * 0.30;
@@ -94,6 +102,30 @@ public class Evaluations {
         }
 
         return total;
+    }
+
+    public ArrayList<Double> calculateRequired(Double tot, int current) {
+        ArrayList<Double> required = new ArrayList<>();
+        if (tot == 0) {
+            required.add(6.7);
+            required.add(5.7);
+            required.add(5.7);
+        } else {
+            if (current == 2) {
+                Double tempTotal;
+                required.add(0.0);
+                tempTotal = ((6 - tot) / 2) / 0.35;
+                required.add(tempTotal);
+                required.add(tempTotal);
+            } else if (current == 3) {
+                Double tempTotal;
+                required.add(0.0);
+                required.add(0.0);
+                tempTotal = (6 - tot) / 0.35;
+                required.add(tempTotal);
+            }
+        }
+        return required;
     }
 
 

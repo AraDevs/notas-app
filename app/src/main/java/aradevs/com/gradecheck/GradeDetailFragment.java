@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import aradevs.com.gradecheck.adapters.AdapterGradeDetail;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ public class GradeDetailFragment extends Fragment {
     String courseId;
     @BindView(R.id.gradedetailName)
     TextView gradedetailName;
+    ArrayList<Double> required;
 
     public GradeDetailFragment() {
         // Required empty public constructor
@@ -45,7 +48,7 @@ public class GradeDetailFragment extends Fragment {
         gradedetailRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
         gradedetailRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter mAdapter = new AdapterGradeDetail(id);
+        RecyclerView.Adapter mAdapter = new AdapterGradeDetail(id, required);
         gradedetailRecyclerView.setAdapter(mAdapter);
     }
 
@@ -58,6 +61,7 @@ public class GradeDetailFragment extends Fragment {
         Bundle bundle = getArguments();
         courseId = bundle.getString("id");
         gradedetailName.setText(bundle.getString("name"));
+        required = (ArrayList<Double>) bundle.getSerializable("required");
         return view;
     }
 

@@ -53,17 +53,27 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         final Courses c = items.get(position);
         Double tot = 0.0;
         ArrayList<Double> grades = new ArrayList<>();
-
+        int currentPeriod = 1;
         //retrieving evaluations info
         int p = c.getEva().size() / 3;
-        for (int i = 1; i <= p; i++) {
-            grades.add(new Evaluations().getProm(c.getEva(), i));
+        for (int i = 1; i <= 3; i++) {
+            Double tempTot = new Evaluations().getProm(c.getEva(), i);
+            grades.add(tempTot);
+            if (tempTot == 0.0) {
+                currentPeriod = i;
+                break;
+            }
         }
-        Log.e("items size", String.valueOf(c.getEva().size()));
+
         for (double item : grades) {
             tot += item;
         }
 
+        final ArrayList<Double> requiredGrades = new Evaluations().calculateRequired(tot, currentPeriod);
+        for (double item2 : requiredGrades) {
+            Log.e("Requerido", String.format("%.2f", item2));
+        }
+        Log.e("Final total", String.valueOf(tot));
 
         //tot = c.getEva().getProm();
 
@@ -81,6 +91,7 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
                 Bundle bundle = new Bundle();
                 bundle.putString("id", c.getRegistered_Course());
                 bundle.putString("name", c.getName());
+                bundle.putSerializable("required", requiredGrades);
                 gradeDetailFragment.setArguments(bundle);
                 trans.replace(R.id.container, gradeDetailFragment, "Inicio");
                 trans.addToBackStack(null);
