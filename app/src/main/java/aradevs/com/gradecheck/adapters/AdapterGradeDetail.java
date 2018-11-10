@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +16,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -29,9 +30,11 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
 
     //declaring global useful variables
     private static final String TAG = "GradesFragment-Adapter";
-    String id;
+    private String id;
+    private ArrayList<Double> required;
 
-    public AdapterGradeDetail(String id) {
+    public AdapterGradeDetail(String id, ArrayList<Double> required) {
+        this.required = required;
         this.id = id;
     }
 
@@ -52,8 +55,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(holder.context, "Hey", Toast.LENGTH_SHORT).show();
-                        holder.pb.setVisibility(View.GONE);
+                        Toast.makeText(holder.context, "Error de servidor", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -73,13 +75,16 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         String title = "Periodo " + (holder.getAdapterPosition() + 1);
+        String req = "Nota requerida: " + String.format("%.2f", required.get(position));
+        if (position == 2 && required.get(position) > 10) {
+            req = "Lo sentimos, esta materia esta reprobada";
+        }
         holder.period.setText(title);
+        holder.required.setText(req);
         //setting on click listener to the cardview
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                holder.pb.setVisibility(View.VISIBLE);
                 LinearLayout expandableLayout = v.findViewById(R.id.expandableLayout);
 
                 int isExpanded = expandableLayout.getVisibility();
@@ -89,8 +94,6 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
                 } else {
                     expandableLayout.setVisibility(View.GONE);
                 }
-
-                holder.pb.setVisibility(View.GONE);
             }
         });
     }
@@ -105,9 +108,9 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
         //declaring variables
         CardView ln;
         TextView period;
-        ProgressBar pb;
         RecyclerView recyclerView;
         Context context;
+        TextView required;
 
         ViewHolder(CardView itemView) {
             super(itemView);
@@ -115,9 +118,9 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
             //binding UI
             ln = itemView;
             period = itemView.findViewById(R.id.gradedetailPeriod);
-            pb = itemView.findViewById(R.id.gradedetailPbX);
             recyclerView = itemView.findViewById(R.id.gradedetailRecyclerViewX);
             context = itemView.getContext();
+            required = itemView.findViewById(R.id.gradedetailRequired);
         }
     }
 }

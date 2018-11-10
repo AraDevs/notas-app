@@ -22,6 +22,7 @@
     <string name="teachers">Docentes</string>
     <string name="appealTitle">Apelacion de notas</string>
     <string name="appealDescription">Ingrese la descripcion por la cual solicita la apelacion, ademas puede adjuntar un archivo para justificar. Para multiples archivos se recomienda comprimirlos en .zip</string>
+    <string name="corrections">Correcciones</string>
     <string name="recentTitle">Ultima actividad</string>
 
     <!-- TODO: Remove or change this placeholder text -->
