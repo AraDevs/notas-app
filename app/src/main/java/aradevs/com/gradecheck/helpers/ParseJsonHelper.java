@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import aradevs.com.gradecheck.models.Corrections;
 import aradevs.com.gradecheck.models.Courses;
 import aradevs.com.gradecheck.models.Evaluations;
 import aradevs.com.gradecheck.models.Success;
@@ -292,6 +293,33 @@ public class ParseJsonHelper {
         }
 
         return evaluations;
+    }
+
+    public ArrayList<Corrections> parseJsonCorrections(JSONArray jsonObject) {
+        //filling evaluations model
+        ArrayList<Corrections> corrections = new ArrayList<>();
+        //JSONArray registeredArray;
+        // retrieving registered courses
+        //registeredArray = jsonObject.getJSONArray("evaluation");
+
+        //navigating through courses
+        for (int i = jsonObject.length(); i >= 0; i--) {
+            try {
+                Corrections tempCorrection = new Corrections();
+                //obtaining current evaluations
+                JSONObject correctionObject = jsonObject.getJSONObject(i);
+                tempCorrection.setId(correctionObject.getString("id"));
+                tempCorrection.setDescription(correctionObject.getString("description"));
+                tempCorrection.setOwner(correctionObject.getString("owner"));
+                tempCorrection.setState(correctionObject.getString("correctionState"));
+
+                corrections.add(tempCorrection);
+            } catch (JSONException e) {
+                Log.e(TAG, "Json parsing Error: " + e.getMessage());
+            }
+        }
+
+        return corrections;
     }
 
     public Success parseJsonSuccess(JSONObject jsonObject) {

@@ -15,6 +15,7 @@ public class ServerHelper {
     public static final String COURSE_TEACHER = "employees/byRegisteredCourse/";
     public static final String SUCCESS_RATIO = "courseTeachers/passCount/byRegisteredCourse/";
     public static final String PROFILE_IMAGE = "users/image/";
+    public static final String CORRECTIONS_BY_STUDENT = "corrections/byStudent/";
 
     public static final String CURRENT_GRADES = "/full/active";
     public static final String CURRENT_COURSES = "/courses/active";
