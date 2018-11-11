@@ -15,11 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import aradevs.com.gradecheck.adapters.AdapterGrades;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -56,6 +60,7 @@ public class GradesFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.e("entra?", "entra");
                         swiperefresh.setRefreshing(false);
                         ProgressBar pb = view.findViewById(R.id.pbGrades);
                         pb.setVisibility(View.GONE);
@@ -71,12 +76,26 @@ public class GradesFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         swiperefresh.setRefreshing(false);
                         pbGrades.setVisibility(View.GONE);
                     }
-                }
-        );
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(context).addToRequestQueue(request, context);
     }
@@ -110,15 +129,16 @@ public class GradesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //setting fragment context
-        context = getActivity().getApplicationContext();
-        //setting view holder
-        view = getView();
-
-        //requesting grades data
-        requestData(view, u.getPersonId());
-        Log.e("Memory", String.valueOf(Runtime.getRuntime().totalMemory()));
+        try {
+            //setting fragment context
+            context = getActivity().getApplicationContext();
+            //setting view holder
+            view = getView();
+            //requesting grades data
+            requestData(view, u.getPersonId());
+        } catch (Exception e) {
+            Log.e("Skipped request data", "Probably cleaning fragment");
+        }
     }
 
     @Override

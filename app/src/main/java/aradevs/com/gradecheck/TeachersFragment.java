@@ -7,17 +7,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import aradevs.com.gradecheck.adapters.AdapterTeachers;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -66,12 +71,26 @@ public class TeachersFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         teacherPb.setVisibility(View.GONE);
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(context).addToRequestQueue(request, context);
     }
@@ -88,7 +107,7 @@ public class TeachersFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context = view.getContext();
+        context = getActivity().getApplicationContext();
         sh = new SharedHelper(getActivity());
         u = sh.getUser();
     }
@@ -96,7 +115,11 @@ public class TeachersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestData(getView(), u.getPersonId());
+        try {
+            requestData(getView(), u.getPersonId());
+        } catch (Exception e) {
+            Log.e("Skipped request data", "Probably cleaning fragment");
+        }
     }
 
     @Override

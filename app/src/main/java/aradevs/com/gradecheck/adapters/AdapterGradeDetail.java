@@ -1,5 +1,6 @@
 package aradevs.com.gradecheck.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -18,9 +20,13 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import aradevs.com.gradecheck.R;
 import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.helpers.SharedHelper;
+import aradevs.com.gradecheck.models.Users;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 
 /**
@@ -32,10 +38,17 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
     private static final String TAG = "GradesFragment-Adapter";
     private String id;
     private ArrayList<Double> required;
+    private SharedHelper sh;
+    private Users u;
+    private Activity activity;
 
-    public AdapterGradeDetail(String id, ArrayList<Double> required) {
+    public AdapterGradeDetail(String id, ArrayList<Double> required, Activity a) {
         this.required = required;
         this.id = id;
+        this.activity = a;
+        sh = new SharedHelper(a);
+        u = sh.getUser();
+
     }
 
     //request grades data method
@@ -55,10 +68,25 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(holder.context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(activity);
+                            } else {
+                                Toast.makeText(activity.getApplicationContext(), new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(activity.getApplicationContext(), "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(holder.context).addToRequestQueue(request, holder.context);
     }
@@ -114,7 +142,6 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
 
         ViewHolder(CardView itemView) {
             super(itemView);
-
             //binding UI
             ln = itemView;
             period = itemView.findViewById(R.id.gradedetailPeriod);

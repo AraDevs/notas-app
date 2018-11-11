@@ -131,6 +131,7 @@ public class ParseJsonHelper {
             users.setPhone(userJson.getJSONObject("person").getString("phone"));
             users.setSurname(userJson.getJSONObject("person").getString("surname"));
             users.setUsername(userJson.getString("username"));
+            users.setToken(jsonObject.getString("token"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
