@@ -31,6 +31,8 @@ import com.bikomobile.multipart.MultipartRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -148,8 +150,9 @@ public class AppealFragment extends Fragment {
                     }
                     multipart.addParam("description", appealDescription.getText().toString());
                     multipart.addParam("gradeId", id);
-
-                    MultipartRequest multipartRequest = multipart.getRequest(ServerHelper.URL + ServerHelper.CORRECTIONS, new Response.Listener<NetworkResponse>() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("token", u.getToken());
+                    MultipartRequest multipartRequest = multipart.getRequest(ServerHelper.URL + ServerHelper.CORRECTIONS, params, new Response.Listener<NetworkResponse>() {
                         @Override
                         public void onResponse(NetworkResponse response) {
                             //notifying about changes
