@@ -14,11 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import aradevs.com.gradecheck.adapters.AdapterSubject;
 import aradevs.com.gradecheck.helpers.ServerHelper;
@@ -67,12 +71,26 @@ public class SubjectsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         subjectPb.setVisibility(View.GONE);
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(context).addToRequestQueue(request, context);
     }

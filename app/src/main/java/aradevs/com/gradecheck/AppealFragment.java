@@ -4,11 +4,13 @@ package aradevs.com.gradecheck;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,10 +31,14 @@ import com.bikomobile.multipart.MultipartRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.helpers.SharedHelper;
 import aradevs.com.gradecheck.helpers.ZipHelper;
+import aradevs.com.gradecheck.models.Users;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +72,6 @@ public class AppealFragment extends Fragment {
     TextView appealFilePath;
     @BindView(R.id.appealRemoveFile)
     Button appealRemoveFile;
-
     String zipPath = "/storage/emulated/0/tempGradeCheck.zip";
     String id = "";
     Uri tempUri = null;
@@ -74,6 +79,9 @@ public class AppealFragment extends Fragment {
     LinearLayout appealLoading;
     @BindView(R.id.appealViewContainer)
     LinearLayout appealViewContainer;
+    Users u;
+    SharedHelper sh;
+    Context context;
 
     public AppealFragment() {
         // Required empty public constructor
@@ -89,6 +97,13 @@ public class AppealFragment extends Fragment {
         Bundle bundle = getArguments();
         id = bundle.getString("id");
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sh = new SharedHelper(getActivity());
+        u = sh.getUser();
     }
 
     @Override
@@ -135,8 +150,9 @@ public class AppealFragment extends Fragment {
                     }
                     multipart.addParam("description", appealDescription.getText().toString());
                     multipart.addParam("gradeId", id);
-
-                    MultipartRequest multipartRequest = multipart.getRequest(ServerHelper.URL + ServerHelper.CORRECTIONS, new Response.Listener<NetworkResponse>() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("token", u.getToken());
+                    MultipartRequest multipartRequest = multipart.getRequest(ServerHelper.URL + ServerHelper.CORRECTIONS, params, new Response.Listener<NetworkResponse>() {
                         @Override
                         public void onResponse(NetworkResponse response) {
                             //notifying about changes
@@ -150,7 +166,15 @@ public class AppealFragment extends Fragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                            try {
+                                if (error.networkResponse.statusCode == 401) {
+                                    sh.sessionExpired(getActivity());
+                                } else {
+                                    Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                            }
                             disableLoading();
                         }
                     });
@@ -167,6 +191,12 @@ public class AppealFragment extends Fragment {
                 cleanFile();
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context = getActivity().getApplicationContext();
     }
 
     @Override

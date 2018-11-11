@@ -1,11 +1,14 @@
 package aradevs.com.gradecheck.helpers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import aradevs.com.gradecheck.LoginActivity;
 import aradevs.com.gradecheck.models.Users;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -45,5 +48,14 @@ public class SharedHelper {
         SharedPreferences.Editor edit = sp.edit();
         edit.putString("usuario", gson.toJson(users));
         edit.apply();
+    }
+
+    public void sessionExpired(Activity a) {
+        //clearing shared preferences
+        clear();
+        //redirect to login
+        Toast.makeText(a.getApplicationContext(), "Sesion caducada", Toast.LENGTH_SHORT).show();
+        a.startActivity(new Intent(a, LoginActivity.class));
+        a.finish();
     }
 }

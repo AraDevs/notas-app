@@ -4,6 +4,7 @@ package aradevs.com.gradecheck;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -24,12 +27,16 @@ import com.github.mikephil.charting.data.PieEntry;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.helpers.SharedHelper;
 import aradevs.com.gradecheck.models.Success;
 import aradevs.com.gradecheck.models.Teachers;
+import aradevs.com.gradecheck.models.Users;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +60,9 @@ public class SubjectDetailFragment extends Fragment {
     String courseId;
     @BindView(R.id.subjectDetailTeacher)
     TextView subjectDetailTeacher;
+    SharedHelper sh;
+    Users u;
+    Context context;
 
     public SubjectDetailFragment() {
         // Required empty public constructor
@@ -102,11 +112,26 @@ public class SubjectDetailFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         error.printStackTrace();
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(request, getActivity().getApplicationContext());
     }
@@ -165,8 +190,21 @@ public class SubjectDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        requestData(getView(), courseId);
-        requestTeacherData(getView(), courseId);
+        sh = new SharedHelper(getActivity());
+        u = sh.getUser();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context = getActivity().getApplicationContext();
+        try {
+            requestData(getView(), courseId);
+            requestTeacherData(getView(), courseId);
+        } catch (Exception e) {
+            Log.e("Skipped request data", "Probably cleaning fragment");
+        }
     }
 
     @Override

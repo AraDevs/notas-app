@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class GradeDetailFragment extends Fragment {
         gradedetailRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
         gradedetailRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter mAdapter = new AdapterGradeDetail(id, required);
+        RecyclerView.Adapter mAdapter = new AdapterGradeDetail(id, required, getActivity());
         gradedetailRecyclerView.setAdapter(mAdapter);
     }
 
@@ -70,17 +71,21 @@ public class GradeDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //initializing variables
         this.view = view;
-        requestData(view, courseId);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        try {
+            requestData(view, courseId);
+        } catch (Exception e) {
+            Log.e("Skipped request data", "Probably cleaning fragment");
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        //unbinder.unbind();
     }
 }

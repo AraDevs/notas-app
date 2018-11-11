@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import aradevs.com.gradecheck.helpers.ErrorHelper;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
 import aradevs.com.gradecheck.helpers.SharedHelper;
@@ -55,12 +54,9 @@ public class LoginActivity extends Activity {
                             //declaring useful variables
                             JSONObject obj = new JSONObject(response);
                             ParseJsonHelper p = new ParseJsonHelper();
-
                             //saving object in shared preferences
                             Users tempU = p.parseJsonUsers(obj);
                             sh.saveUser(tempU);
-
-
                             //go to next activity
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
@@ -73,8 +69,11 @@ public class LoginActivity extends Activity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Error login", new String(error.networkResponse.data));
-                Toast.makeText(getApplicationContext(), ErrorHelper.getError(new String(error.networkResponse.data)), Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(getApplicationContext(), new String(error.networkResponse.data), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error de servidor", Toast.LENGTH_LONG).show();
+                }
                 VolleyLog.d("volley", "Error: " + error.getMessage());
                 error.printStackTrace();
             }
@@ -118,7 +117,11 @@ public class LoginActivity extends Activity {
         String username = etLoginUsername.getText().toString().trim();
         String pass = etLoginPassword.getText().toString().trim();
         if (!username.isEmpty() && !pass.isEmpty()) {
-            requestData(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
+            try {
+                requestData(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
+            } catch (Exception e) {
+                Log.e("Error de login", "Error de login");
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show();
         }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +15,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import aradevs.com.gradecheck.adapters.AdapterTeacherSubjects;
 import aradevs.com.gradecheck.helpers.ClipboardHelper;
 import aradevs.com.gradecheck.helpers.ImagesHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.helpers.SharedHelper;
 import aradevs.com.gradecheck.models.Teachers;
+import aradevs.com.gradecheck.models.Users;
 import aradevs.com.gradecheck.singleton.AppSingleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +60,8 @@ public class TeacherDetailFragment extends Fragment {
     @BindView(R.id.teacherdetailRecyclerView)
     RecyclerView teacherdetailRecyclerView;
     Unbinder unbinder;
+    SharedHelper sh;
+    Users u;
 
     public TeacherDetailFragment() {
 
@@ -78,12 +87,26 @@ public class TeacherDetailFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         teacherdetailPb.setVisibility(View.GONE);
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(context).addToRequestQueue(request, context);
     }
@@ -102,8 +125,7 @@ public class TeacherDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Required empty public constructor
-        context = view.getContext();
+
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
         //obtaining images
         ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + t.getUsers().getId(),
@@ -111,12 +133,21 @@ public class TeacherDetailFragment extends Fragment {
                 getActivity().getApplicationContext());
         teacherdetailName.setText(fullName);
         teacherdetailEmail.setText(t.getUsers().getEmail());
+        sh = new SharedHelper(getActivity());
+        u = sh.getUser();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        requestData(getView(), t.getId());
+
+        // Required empty public constructor
+        context = getActivity().getApplicationContext();
+        try {
+            requestData(getView(), t.getId());
+        } catch (Exception e) {
+            Log.e("Skipped request data", "Probably cleaning fragment");
+        }
     }
 
     @Override
