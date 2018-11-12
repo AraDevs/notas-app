@@ -34,7 +34,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         this.userEmail.setText(sh.getUser().getEmail());
 
         //getting image
-        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + sh.getUser().getId(),
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + sh.getUser().getId() + "/withToken/" + sh.getUser().getToken(),
                 this.userPhoto,
                 getApplicationContext());
 

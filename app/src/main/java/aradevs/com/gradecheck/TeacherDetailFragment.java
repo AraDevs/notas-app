@@ -127,14 +127,15 @@ public class TeacherDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         String fullName = t.getUsers().getName() + " " + t.getUsers().getSurname();
-        //obtaining images
-        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + t.getUsers().getId(),
-                teacherdetailImage,
-                getActivity().getApplicationContext());
+
         teacherdetailName.setText(fullName);
         teacherdetailEmail.setText(t.getUsers().getEmail());
         sh = new SharedHelper(getActivity());
         u = sh.getUser();
+
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + t.getUsers().getId() + "/withToken/" + u.getToken(),
+                teacherdetailImage,
+                getActivity().getApplicationContext());
     }
 
     @Override
@@ -155,9 +156,9 @@ public class TeacherDetailFragment extends Fragment {
         super.onDestroyView();
         //unbinder.unbind();
     }
-
     @OnClick(R.id.teacherdetailCopy)
     public void onViewClicked() {
+
         ClipboardHelper ch = new ClipboardHelper();
         ch.copyToClipBoard(getActivity(), "Email", teacherdetailEmail.getText());
     }
