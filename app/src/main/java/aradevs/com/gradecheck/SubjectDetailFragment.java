@@ -167,11 +167,26 @@ public class SubjectDetailFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(context, getResources().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
+                        try {
+                            if (error.networkResponse.statusCode == 401) {
+                                sh.sessionExpired(getActivity());
+                            } else {
+                                Toast.makeText(context, new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error de servidor", Toast.LENGTH_SHORT).show();
+                        }
                         error.printStackTrace();
                     }
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", u.getToken());
+                return params;
+            }
+        };
         //send request to queue
         AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(request, getActivity().getApplicationContext());
     }
@@ -192,7 +207,6 @@ public class SubjectDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         sh = new SharedHelper(getActivity());
         u = sh.getUser();
-
     }
 
     @Override

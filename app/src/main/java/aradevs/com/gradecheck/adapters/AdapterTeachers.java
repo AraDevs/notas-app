@@ -20,6 +20,7 @@ import aradevs.com.gradecheck.TeacherDetailFragment;
 import aradevs.com.gradecheck.helpers.ImagesHelper;
 import aradevs.com.gradecheck.helpers.ParseJsonHelper;
 import aradevs.com.gradecheck.helpers.ServerHelper;
+import aradevs.com.gradecheck.helpers.SharedHelper;
 import aradevs.com.gradecheck.models.Teachers;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,10 +32,12 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
     //declaring global useful variables
     private static final String TAG = "TeachersFragment-Adapter";
     private ArrayList<Teachers> items;
+    private SharedHelper sh;
 
-    public AdapterTeachers(JSONArray items) {
+    public AdapterTeachers(JSONArray items, SharedHelper sh) {
         ParseJsonHelper helper = new ParseJsonHelper();
         this.items = helper.parseJsonTeachers(items);
+        this.sh = sh;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class AdapterTeachers extends RecyclerView.Adapter<AdapterTeachers.ViewHo
         holder.name.setText(fullName);
         holder.id.setText(items.get(position).getId());
         //obtaining images
-        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + items.get(position).getUsers().getId(),
+        ImagesHelper.setImage(ServerHelper.URL + ServerHelper.PROFILE_IMAGE + items.get(position).getUsers().getId() + "/withToken/" + sh.getUser().getToken(),
                 holder.image,
                 holder.context);
         //setting onclick listener

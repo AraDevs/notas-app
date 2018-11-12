@@ -64,13 +64,14 @@ public class TeachersFragment extends Fragment {
                         teacherRecyclerView.setHasFixedSize(true);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
                         teacherRecyclerView.setLayoutManager(mLayoutManager);
-                        RecyclerView.Adapter mAdapter = new AdapterTeachers(response);
+                        RecyclerView.Adapter mAdapter = new AdapterTeachers(response, sh);
                         teacherRecyclerView.setAdapter(mAdapter);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         try {
                             if (error.networkResponse.statusCode == 401) {
                                 sh.sessionExpired(getActivity());
@@ -86,6 +87,7 @@ public class TeachersFragment extends Fragment {
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("token", u.getToken());
                 return params;
@@ -107,7 +109,6 @@ public class TeachersFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context = getActivity().getApplicationContext();
         sh = new SharedHelper(getActivity());
         u = sh.getUser();
     }
@@ -115,6 +116,7 @@ public class TeachersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        context = getActivity().getApplicationContext();
         try {
             requestData(getView(), u.getPersonId());
         } catch (Exception e) {
