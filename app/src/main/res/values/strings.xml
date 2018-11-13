@@ -24,7 +24,12 @@
     <string name="appealDescription">Ingrese la descripcion por la cual solicita la apelacion, ademas puede adjuntar un archivo para justificar. Para multiples archivos se recomienda comprimirlos en .zip</string>
     <string name="corrections">Correcciones</string>
     <string name="recentTitle">Ultima actividad</string>
-
+    <string name="about">Calculo de notas</string>
+    <string name="withLab">Si la evaluacion de la materia corresponde a Laboratorio, la formula de calculo es: </string>
+    <string name="withLabTheory">Si la evaluacion de la materia corresponde a su parte teorica, la formula de calculo es: </string>
+    <string name="withoutLab">El calculo de evaluacion para materias sin laboratorio es mas sencillo, la formula de calculo es:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aboutProm">El promedio general de la materia es obtenido mediante la suma de la equivalencia final de cada periodo, el PRIMER PERIODO tiene un valor de 0.30 para la nota final de la materia, el SEGUNDO y TERCER PERIODO tienen un valor de 0.35, la formula de calculo por periodo es: </string>
+    <string name="aboutHeader">La nota final de periodo se obtiene sumando todas las notas de las evaluaciones correspondientes, la aplicacion realiza el calculo automatico de la "Nota real de evaluacion", sin embargo, proveemos las formulas de calculo por motivos informativos y de transparencia</string>
 </resources>
