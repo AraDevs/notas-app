@@ -47,18 +47,17 @@ public class ParseJsonHelper {
                     //obtaining current evaluations
                     JSONObject evaObject = evaArray.getJSONObject(j);
                     JSONObject currentEva = evaObject.getJSONObject("evaluation");
-                    if (!currentEva.getBoolean("laboratory")) {
-                        //filling evaluations model
-                        Evaluations e = new Evaluations(
-                                currentEva.getString("description"),
-                                currentEva.getString("period"),
-                                evaObject.getString("grade"),
-                                currentEva.getString("percentage"),
-                                evaObject.getString("id")
-                        );
-                        tempEvaluation.add(e);
+                    Log.e("Entro", currentEva.getString("description"));
+                    //filling evaluations model
+                    Evaluations e = new Evaluations(
+                            currentEva.getString("description"),
+                            currentEva.getString("period"),
+                            evaObject.getString("grade"),
+                            currentEva.getString("percentage"),
+                            evaObject.getString("id"),
+                            currentEva.getString("laboratory"));
+                    tempEvaluation.add(e);
                     }
-                }
 
 
                 //filling courses model
@@ -278,15 +277,15 @@ public class ParseJsonHelper {
                 //obtaining current evaluations
                 JSONObject evaObject = jsonObject.getJSONObject(i);
                 JSONArray grade = evaObject.getJSONArray("grades");
-                if (!evaObject.getBoolean("laboratory")) {
+                Log.e("entro 2", evaObject.getString("laboratory"));
                     Evaluations tempEva = new Evaluations();
                     tempEva.setDescriptions(evaObject.getString("description"));
                     tempEva.setEvaluations(grade.getJSONObject(0).getString("grade"));
                     tempEva.setPercentage(evaObject.getString("percentage"));
                     tempEva.setPeriods(evaObject.getString("period"));
                     tempEva.setGradeId(grade.getJSONObject(0).getString("id"));
+                tempEva.setLaboratory(evaObject.getString("laboratory"));
                     evaluations.add(tempEva);
-                }
 
             } catch (JSONException e) {
                 Log.e(TAG, "Json parsing Error: " + e.getMessage());

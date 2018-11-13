@@ -52,15 +52,73 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
         //declaring variables
         final Courses c = items.get(position);
         Double tot = 0.0;
+        Double totLab = 0.0;
+        Double finalProm = 0.0;
+
+        ArrayList<Double> gradesLab = new ArrayList<>();
         ArrayList<Double> grades = new ArrayList<>();
+
+        //temp Arraylists
+        ArrayList<Evaluations> withoutLab = new ArrayList<>();
+        ArrayList<Evaluations> withLab = new ArrayList<>();
+
+        for (Evaluations eva : c.getEva()) {
+            if (eva.getLaboratory().equals("false")) {
+                withoutLab.add(eva);
+            } else {
+                withLab.add(eva);
+            }
+        }
+
         int currentPeriod = 1;
-        //retrieving evaluations info
-        int p = c.getEva().size() / 3;
+        //retrieving evaluations
         for (int i = 1; i <= 3; i++) {
-            Double tempTot = new Evaluations().getProm(c.getEva(), i);
+            Double tempTot = new Evaluations().getProm(withoutLab, i);
+            if (withLab.size() == 0) {
+                switch (i) {
+                    case 1:
+                        tempTot = tempTot * 0.30;
+                        break;
+                    case 2:
+                        tempTot = tempTot * 0.35;
+                        break;
+                    case 3:
+                        tempTot = tempTot * 0.35;
+                }
+            } else {
+                switch (i) {
+                    case 1:
+                        tempTot = (tempTot * 0.6) * 0.30;
+                        break;
+                    case 2:
+                        tempTot = (tempTot * 0.6) * 0.35;
+                        break;
+                    case 3:
+                        tempTot = (tempTot * 0.6) * 0.35;
+                }
+            }
             grades.add(tempTot);
             if (tempTot == 0.0) {
                 currentPeriod = i;
+                break;
+            }
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            Double tempTot = new Evaluations().getPromLab(withLab, i);
+            switch (i) {
+                case 1:
+                    tempTot = (tempTot * 0.4) * 0.30;
+                    break;
+                case 2:
+                    tempTot = (tempTot * 0.4) * 0.35;
+                    break;
+                case 3:
+                    tempTot = (tempTot * 0.4) * 0.35;
+            }
+            gradesLab.add(tempTot);
+            if (tempTot == 0.0) {
+                //currentPeriod = i;
                 break;
             }
         }
@@ -69,18 +127,29 @@ public class AdapterGrades extends RecyclerView.Adapter<AdapterGrades.ViewHolder
             tot += item;
         }
 
-        final ArrayList<Double> requiredGrades = new Evaluations().calculateRequired(tot, currentPeriod);
+        for (double item : gradesLab) {
+            totLab += item;
+        }
+
+        if (withLab.size() == 0) {
+            finalProm = tot;
+        } else {
+            finalProm = tot + totLab;
+        }
+
+
+        final ArrayList<Double> requiredGrades = new Evaluations().calculateRequired(finalProm, currentPeriod);
         for (double item2 : requiredGrades) {
             Log.e("Requerido", String.format("%.2f", item2));
         }
-        Log.e("Final total", String.valueOf(tot));
+        Log.e("Final total", String.valueOf(finalProm));
 
         //tot = c.getEva().getProm();
 
         //setting values
         holder.name.setText(c.getName());
         holder.id.setText(c.getId());
-        holder.grades.setText(String.format("%.2f",tot));
+        holder.grades.setText(String.format("%.2f", finalProm));
 
         holder.ln.setOnClickListener(new View.OnClickListener() {
             @Override

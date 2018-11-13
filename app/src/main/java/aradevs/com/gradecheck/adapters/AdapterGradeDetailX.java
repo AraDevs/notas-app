@@ -48,12 +48,31 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
+        Double total = 0.0;
+        int laboratoryCount = 0;
+        for (int i = latest; i < items.size(); i++) {
+            if (items.get(i).getLaboratory().equals("true")) {
+                laboratoryCount++;
+            }
+        }
         for (int i = latest; i < items.size(); i++) {
             if (items.get(i).getPeriods().equals(this.period)) {
+                if (items.get(i).getLaboratory().equals("true")) {
+                    holder.lab.setVisibility(View.VISIBLE);
+                }
+                total = (Double.parseDouble(items.get(i).getEvaluations()) * (Double.parseDouble(items.get(i).getPercentage()) / 100));
+                if (laboratoryCount > 0) {
+                    if (items.get(i).getLaboratory().equals("true")) {
+                        holder.lab.setVisibility(View.VISIBLE);
+                        total = total * 0.4;
+                    } else {
+                        total = total * 0.6;
+                    }
+                }
                 holder.eva.setText(items.get(i).getDescriptions());
                 holder.percentage.setText(items.get(i).getPercentage().trim());
                 holder.grade.setText(items.get(i).getEvaluations().trim());
+                holder.total.setText(String.format("%.2f", total));
                 final int finalI = i;
                 holder.correction.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -94,6 +113,8 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
         TextView eva;
         TextView grade;
         TextView percentage;
+        TextView lab;
+        TextView total;
         Button correction;
         Context context;
 
@@ -106,6 +127,8 @@ public class AdapterGradeDetailX extends RecyclerView.Adapter<AdapterGradeDetail
             grade = itemView.findViewById(R.id.gradedetailGrade);
             percentage = itemView.findViewById(R.id.gradedetailPercentage);
             correction = itemView.findViewById(R.id.gradeDetailCorrection);
+            lab = itemView.findViewById(R.id.gradeDetailLab);
+            total = itemView.findViewById(R.id.gradeDetailTotal);
             context = itemView.getContext();
         }
     }

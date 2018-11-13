@@ -13,14 +13,17 @@ public class Evaluations {
     private String periods;
     private String evaluations;
     private String percentage;
+    private String laboratory;
 
     public Evaluations() {}
 
-    public Evaluations(String descriptions, String periods, String evaluations, String percentage, String gradeId) {
+    public Evaluations(String descriptions, String periods, String evaluations, String percentage, String gradeId, String laboratory) {
         this.descriptions = descriptions;
         this.periods = periods;
         this.evaluations = evaluations;
         this.percentage = percentage;
+        this.gradeId = gradeId;
+        this.laboratory = laboratory;
     }
 
     public String getGradeId() {
@@ -62,6 +65,15 @@ public class Evaluations {
     public void setPercentage(String percentage) {
         this.percentage = percentage;
     }
+
+    public String getLaboratory() {
+        return laboratory;
+    }
+
+    public void setLaboratory(String laboratory) {
+        this.laboratory = laboratory;
+    }
+
     // GET PROM BASED ON THE SELECTED PERIOD
 
     public Double getProm(ArrayList<Evaluations> evaluations, int periods) {
@@ -88,17 +100,39 @@ public class Evaluations {
             for (Double grade : grades) {
                 sum += grade;
             }
-            Log.e("Suma total", String.valueOf(sum));
-            switch (periods) {
-                case 1:
-                    total = sum * 0.30;
-                    break;
-                case 2:
-                    total = sum * 0.35;
-                    break;
-                case 3:
-                    total = sum * 0.35;
+
+            total = sum;
+        }
+
+        return total;
+    }
+
+    public Double getPromLab(ArrayList<Evaluations> evaluations, int periods) {
+        Double total = 0.0;
+        Double sum = 0.0;
+        ArrayList<Double> grades = new ArrayList<>();
+        Double percentage = 0.0;
+        for (int e = 0; e < evaluations.size(); e++) {
+            if (Integer.parseInt(evaluations.get(e).getPeriods()) == periods) {
+                percentage += Double.parseDouble(evaluations.get(e).getPercentage());
             }
+        }
+        Log.e("Porcentage", String.valueOf(percentage));
+        if (percentage == 100) {
+            for (int i = 0; i < evaluations.size(); i++) {
+                Double eva1 = 0.0;
+                if (Integer.parseInt(evaluations.get(i).getPeriods()) == periods) {
+                    eva1 = Double.parseDouble(evaluations.get(i).getEvaluations()) * Double.parseDouble(evaluations.get(i).getPercentage()) / 100;
+                    Log.e("Nota", String.valueOf(eva1));
+                    grades.add(eva1);
+                }
+
+            }
+            for (Double grade : grades) {
+                sum += grade;
+            }
+            Log.e("Suma total", String.valueOf(sum));
+            total = sum;
         }
 
         return total;

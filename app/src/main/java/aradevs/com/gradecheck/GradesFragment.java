@@ -54,13 +54,13 @@ public class GradesFragment extends Fragment {
     }
 
     //request grades data method
-    private void requestData(final View view, String id) {
+    private void requestData(final View view, final String id) {
         JsonArrayRequest request = new JsonArrayRequest(
                 ServerHelper.URL + ServerHelper.COURSES + id + ServerHelper.CURRENT_GRADES,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.e("entra?", "entra");
+                        Log.e("entra?", ServerHelper.URL + ServerHelper.COURSES + id + ServerHelper.CURRENT_GRADES);
                         swiperefresh.setRefreshing(false);
                         ProgressBar pb = view.findViewById(R.id.pbGrades);
                         pb.setVisibility(View.GONE);

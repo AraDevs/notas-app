@@ -46,6 +46,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         mHelpLiveo.add("Materias Inscritas", R.mipmap.ic_subjects);
         mHelpLiveo.add("Docentes", R.mipmap.ic_teachers);
         mHelpLiveo.add("Correcciones", R.mipmap.ic_mistake);
+        mHelpLiveo.add("Calculo Notas", R.mipmap.ic_help);
 
         with(this) // default theme is dark
                 .startingPosition(0) //Starting position in the list
@@ -80,6 +81,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             case 3:
                 CorrectionsFragment correctionsFragment = new CorrectionsFragment();
                 trans.replace(R.id.container, correctionsFragment, "Apelaciones");
+                break;
+            case 4:
+                AboutFragment aboutFragment = new AboutFragment();
+                trans.replace(R.id.container, aboutFragment, "Ayuda");
                 break;
         }
         //switching fragment
