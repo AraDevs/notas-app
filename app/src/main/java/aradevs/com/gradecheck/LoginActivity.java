@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,6 +42,10 @@ public class LoginActivity extends Activity {
     EditText etLoginPassword;
     @BindView(R.id.btnLogin)
     Button btnLogin;
+    @BindView(R.id.loginLoading)
+    LinearLayout loginLoading;
+    @BindView(R.id.loginContent)
+    LinearLayout loginContent;
 
 
     //method to request user data
@@ -60,7 +66,6 @@ public class LoginActivity extends Activity {
                             //go to next activity
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
-
                         } catch (JSONException e) {
 
                             e.printStackTrace();
@@ -70,9 +75,11 @@ public class LoginActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    Toast.makeText(getApplicationContext(), new String(error.networkResponse.data), Toast.LENGTH_LONG).show();
+                    showLogin();
+                    Toast.makeText(getApplicationContext(), new String(error.networkResponse.data), Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Error de servidor", Toast.LENGTH_LONG).show();
+                    showLogin();
+                    Toast.makeText(getApplicationContext(), "Error de servidor", Toast.LENGTH_SHORT).show();
                 }
                 VolleyLog.d("volley", "Error: " + error.getMessage());
                 error.printStackTrace();
@@ -118,13 +125,24 @@ public class LoginActivity extends Activity {
         String pass = etLoginPassword.getText().toString().trim();
         if (!username.isEmpty() && !pass.isEmpty()) {
             try {
+                hideLogin();
                 requestData(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
             } catch (Exception e) {
+                showLogin();
                 Log.e("Error de login", "Error de login");
             }
         } else {
             Toast.makeText(getApplicationContext(), "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private void hideLogin() {
+        loginLoading.setVisibility(View.VISIBLE);
+        loginContent.setVisibility(View.GONE);
+    }
+
+    private void showLogin() {
+        loginLoading.setVisibility(View.GONE);
+        loginContent.setVisibility(View.VISIBLE);
     }
 }
