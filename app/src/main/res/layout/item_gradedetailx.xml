@@ -3,6 +3,16 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+        android:id="@+id/gradeDetailLab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Laboratorio"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
@@ -65,6 +75,27 @@
             android:text="9.52"
             android:id="@+id/gradedetailPercentage"
             android:layout_weight="2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Abono total:"
+            android:textColor="@color/textPrimary" />
+
+        <TextView
+            android:id="@+id/gradeDetailTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="9.52" />
     </LinearLayout>
 
     <LinearLayout
