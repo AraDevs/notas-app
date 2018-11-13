@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +53,13 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
     }
 
     //request grades data method
-    private void requestData(final AdapterGradeDetail.ViewHolder holder, String id, final String period) {
+    private void requestData(final AdapterGradeDetail.ViewHolder holder, final String id, final String period) {
         JsonArrayRequest request = new JsonArrayRequest(
                 ServerHelper.URL + ServerHelper.COURSE_EVALUATIONS + id + ServerHelper.GRADES,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.e("request", ServerHelper.URL + ServerHelper.COURSE_EVALUATIONS + id + ServerHelper.GRADES);
                         holder.recyclerView.setHasFixedSize(true);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
                         holder.recyclerView.setLayoutManager(mLayoutManager);
@@ -84,6 +86,7 @@ public class AdapterGradeDetail extends RecyclerView.Adapter<AdapterGradeDetail.
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("token", u.getToken());
+                Log.e("token", u.getToken());
                 return params;
             }
         };
