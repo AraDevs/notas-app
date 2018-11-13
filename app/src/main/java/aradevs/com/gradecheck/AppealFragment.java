@@ -156,7 +156,7 @@ public class AppealFragment extends Fragment {
                         @Override
                         public void onResponse(NetworkResponse response) {
                             //notifying about changes
-                            Toast.makeText(getActivity().getApplicationContext(), "Enviado con exito", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity().getApplicationContext(), "Enviado con exito", Toast.LENGTH_SHORT).show();
                             cleanFile();
                             appealDescription.setText("");
                             disableLoading();
